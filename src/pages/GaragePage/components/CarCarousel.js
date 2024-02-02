@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import car from "../../components/images/car.png"
 import Slider from "react-slick";
-
 import { styled } from '@mui/material/styles';
 import { ButtonBase, IconButton, Typography } from '@mui/material';
 
@@ -8,7 +8,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
-
 import { useMediaQuery } from 'react-responsive';
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
@@ -139,10 +138,10 @@ const CarCarousel = ({ theme, images, selectedCar, setSelectedCar }) => {
       justifyContent: 'center',
     }}>
       {images.map((image, index) => (
-        <div key={image.title}>
+        <div key={image.carModel}>
           <ImageButton
             focusRipple
-            key={image.title}
+            key={image.carModel}
             sx={{
               width: '90%',
               height: { xs: '250px', sm: '200px' },
@@ -151,7 +150,7 @@ const CarCarousel = ({ theme, images, selectedCar, setSelectedCar }) => {
             }}
             onClick={() => setSelectedCar(index)}
           >
-            <img src={image.src} alt={image.title}
+            <img src={car} alt={image.carModel}
               style={{
                 position: 'absolute',
                 width: '100%',
@@ -169,7 +168,7 @@ const CarCarousel = ({ theme, images, selectedCar, setSelectedCar }) => {
                 pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
               }}
             >
-              {image.title}
+              {image.carModel}
 
               <ImageMarked className="MuiImageMarked-root" />
             </Typography>

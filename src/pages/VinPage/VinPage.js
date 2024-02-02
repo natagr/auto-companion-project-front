@@ -192,26 +192,26 @@ const properties = [
 
 ]
 
-function addCar(car) {
-  request(
-    "POST",
-    "/cars",
-    {
-      vinCode: car.vinCode,
-      carModel: car.carModel,
-      allInfoAboutCar: car.allInfoAboutCar,
-      image: car.image
-    }).then(
-      (response) => {
-        console.log(response.data.allInfoAboutCar + 'fdfdfdfdfdfd');
-      }).catch(
-        (error) => {
-          // if (error.response.status === 401) {
-          //     setAuthHeader(null);
-          // }
-          console.log(error);
-        }
-      );
+async function addCar(car) {
+  try {
+    const formData = new FormData();
+    formData.append('vinCode', car.vinCode);
+    formData.append('carModel', car.carModel);
+    formData.append('allInfoAboutCar', car.allInfoAboutCar);
+
+    const response = await request("POST", "/cars", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    console.log(response.data.allInfoAboutCar + 'fdfdfdfdfdfd');
+  } catch (error) {
+    // if (error.response && error.response.status === 401) {
+    //   setAuthHeader(null);
+    // }
+    console.error(error);
+  }
 }
 
 const VinPage = ({ theme, language, IsInGarage }) => {
@@ -220,8 +220,7 @@ const VinPage = ({ theme, language, IsInGarage }) => {
     addCar({
       vinCode: vin,
       carModel: json.make.name + ' ' + json.model.name,
-      allInfoAboutCar: jsonString,
-      image: car
+      allInfoAboutCar: jsonString
     });
   });
   const { vin } = useParams();
