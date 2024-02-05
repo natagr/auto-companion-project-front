@@ -27,99 +27,158 @@ import volvo_xc90 from "../components/images/volvo_xc90.png"
 
 import { getUserId, request, setAuthHeader } from '../../helpers/axios_helper';
 
-const cars = [
-    {
-        id: 1,
-        src: car,
-        title: 'Lamborgini Urus',
-    },
-    {
-        id: 2,
-        src: audiq8,
-        title: 'Audi Q8',
-    },
-    {
-        id: 3,
-        src: bmwx5,
-        title: 'Bmw X5',
-    },
-    {
-        id: 4,
-        src: mersedes_s,
-        title: 'Mersedes S-class',
-    },
-    {
-        id: 5,
-        src: volvo_xc90,
-        title: 'Volvo XC90',
-    },
-    // {
-    //     id: 6,
-    //     src: audi,
-    //     title: 'Audi A3',
-    // },
-]
+// const cars = [
+//     {
+//         id: 1,
+//         src: car,
+//         title: 'Lamborgini Urus',
+//     },
+//     {
+//         id: 2,
+//         src: audiq8,
+//         title: 'Audi Q8',
+//     },
+//     {
+//         id: 3,
+//         src: bmwx5,
+//         title: 'Bmw X5',
+//     },
+//     {
+//         id: 4,
+//         src: mersedes_s,
+//         title: 'Mersedes S-class',
+//     },
+//     {
+//         id: 5,
+//         src: volvo_xc90,
+//         title: 'Volvo XC90',
+//     },
+//     // {
+//     //     id: 6,
+//     //     src: audi,
+//     //     title: 'Audi A3',
+//     // },
+// ]
 
 const parts = [brake, engine, filters, suspension];
 
-function fakeFetch(date, { signal }) {
-    return new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-            //const currentMonth = date.month();
-            //const currentYear = date.year();
-            //отримуємо події з бази даних за місяцем
-            const events = [
-                {
-                    day: 25,
-                    type: 'oil_change',
-                    desk: 'Oil change',
-                    carImage: car,
-                },
+// function fakeFetch(date, { signal }) {
+//     return new Promise((resolve, reject) => {
+//         const timeout = setTimeout(() => {
+//             //const currentMonth = date.month();
+//             //const currentYear = date.year();
+//             //отримуємо події з бази даних за місяцем
+//             const events = [
+//                 {
+//                     day: 25,
+//                     type: 'oil_change',
+//                     desk: 'Oil change',
+//                     carImage: car,
+//                 },
+//
+//                 {
+//                     day: 25,
+//                     type: 'belt_change',
+//                     desk: 'Replacing belts',
+//                     carImage: mersedes_s,
+//                 },
+//
+//                 {
+//                     day: 25,
+//                     type: 'battery_replacement',
+//                     desk: 'Scheduled battery replacement',
+//                     carImage: volvo_xc90,
+//                 },
+//
+//                 {
+//                     day: 30,
+//                     type: 'filter_change',
+//                     desk: 'Replace filters',
+//                     carImage: bmwx5,
+//                 },
+//                 {
+//                     day: 2,
+//                     type: 'routine_maintenance',
+//                     desk: 'Scheduled maintenance',
+//                     carImage: volvo_xc90,
+//                 },
+//             ];
+//
+//
+//             resolve({ events });
+//         }, 500);
+//
+//         signal.onabort = () => {
+//             clearTimeout(timeout);
+//             reject(new DOMException('aborted', 'AbortError'));
+//         };
+//     });
+// }
 
-                {
-                    day: 25,
-                    type: 'belt_change',
-                    desk: 'Replacing belts',
-                    carImage: mersedes_s,
-                },
 
-                {
-                    day: 25,
-                    type: 'battery_replacement',
-                    desk: 'Scheduled battery replacement',
-                    carImage: volvo_xc90,
-                },
+function getEvents(month, year) {
+    // Assuming that request returns a promise
+    console.log('Making request with month:', month, 'and year:', year);
 
-                {
-                    day: 30,
-                    type: 'filter_change',
-                    desk: 'Replace filters',
-                    carImage: bmwx5,
-                },
-                {
-                    day: 2,
-                    type: 'routine_maintenance',
-                    desk: 'Scheduled maintenance',
-                    carImage: volvo_xc90,
-                },
-            ];
+    return request("GET", `/events?month=${month}&year=${year}`)
+        .then(response => {
+            console.log('Fetched data:', response.data.content);
+            if (!Array.isArray(response.data.content)) {
+                throw new Error('Response is not an array');
+            }
 
-
-            resolve({ events });
-        }, 500);
-
-        signal.onabort = () => {
-            clearTimeout(timeout);
-            reject(new DOMException('aborted', 'AbortError'));
-        };
-    });
+            return response.data.content;
+        })
+        .catch(error => {
+            console.log('Error:', error);
+            throw error;
+        });
 }
 
 
-
-
-
 const HomePage = ({ theme, language }) => {
+
+    // Ініціалізація стану для автомобілів
+    const [cars, setCars] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [events, setEvents] = React.useState([]);
+    const requestAbortController = React.useRef(null);
+
+    // Оновлена функція для отримання автомобілів
+    const getCars = () => {
+        request("GET", "/cars/get-garage", {}).then(
+            (response) => {
+                setCars(response.data.content); // Оновлення стану автомобілів
+                setIsLoading(false); // Завершення завантаження
+            }).catch((error) => {
+            console.log(error);
+            setIsLoading(false); // Обробка помилки
+        });
+    };
+
+    // Виклик getCars при монтуванні компонента
+    React.useEffect(() => {
+        setIsLoading(true); // Початок завантаження
+        getCars(); // Отримання даних про автомобілі
+        // Тут може бути ваш код для ініціалізації інших запитів або станів
+    }, []);
+
+
+    const fetchEvents2 = (date) => {
+        return new Promise((resolve, reject) => {
+            const controller = new AbortController();
+            getEvents(date.month() + 1, date.year())
+                .then(events => {
+                    resolve(events); // Resolve the promise with events
+                })
+                .catch(error => {
+                    if (error.name !== 'AbortError') {
+                        console.error('Failed to fetch events:', error);
+                        reject(error); // Reject the promise on error
+                    }
+                });
+        });
+    };
 
 
     const currentDate = new Date();
@@ -155,33 +214,44 @@ const HomePage = ({ theme, language }) => {
 
     const [calendarValue, setCalendarValue] = React.useState(dayjs());
 
-    const [isLoading, setIsLoading] = React.useState(false);
 
-    const [events, setEvents] = React.useState([]);
-    const requestAbortController = React.useRef(null);
-    const fetchEvents = (date) => {
-        const controller = new AbortController();
-        fakeFetch(date, {
-            signal: controller.signal,
-        })
-            .then(({ events }) => {
-                setEvents(events);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                if (error.name !== 'AbortError') {
-                    throw error;
-                }
-            });
-
-        requestAbortController.current = controller;
-    };
+    // const fetchEvents = (date) => {
+    //     const controller = new AbortController();
+    //     fakeFetch(date, {
+    //         signal: controller.signal,
+    //     })
+    //         .then(({ events }) => {
+    //             setEvents(events);
+    //             setIsLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             if (error.name !== 'AbortError') {
+    //                 throw error;
+    //             }
+    //         });
+    //
+    //     requestAbortController.current = controller;
+    // };
 
 
     React.useEffect(() => {
-        fetchEvents(calendarValue);
-        return () => requestAbortController.current?.abort();
-    });
+        setIsLoading(true); // Початок завантаження
+        fetchEvents2(calendarValue, { signal: requestAbortController.current?.signal })
+            .then(events => {
+                console.log('Events:', events); // Перевірте дані в консолі
+                setEvents(events);
+                setIsLoading(false);
+            })
+
+            .catch(error => {
+                console.error('Failed to fetch events:', error);
+                setIsLoading(false);
+            })
+        ;
+
+        return () => requestAbortController.current?.abort(); // Відміна запиту при розмонтуванні компоненту
+    }, [calendarValue]); // Залежність від зміни вибраної дати
+
 
 
 
@@ -191,7 +261,7 @@ const HomePage = ({ theme, language }) => {
         }
         setIsLoading(true);
         setEvents([]);
-        fetchEvents(date);
+        fetchEvents2(date);
     };
 
 
@@ -221,15 +291,15 @@ const HomePage = ({ theme, language }) => {
                                 <Card key={index} sx={{ background: theme.palette.background.default, width: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
                                     <CardMedia
-                                        image={car.src}
-                                        title={car.title}
+                                        image={car1}
+                                        title={car.carModel}
                                         component="img"
                                         width="100%"
                                         style={{ objectFit: 'cover' }}
                                     />
                                     <CardContent>
                                         <Typography variant="h6" style={{ color: theme.palette.text.primary, textAlign: 'center' }}>
-                                            {car.title}
+                                            {car.carModel}
                                         </Typography>
                                     </CardContent>
                                 </Card>

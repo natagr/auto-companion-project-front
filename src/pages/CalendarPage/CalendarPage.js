@@ -35,59 +35,59 @@ import volvo_xc90 from "../components/images/volvo_xc90.png"
 
 import EventDialog from './components/EventDialog';
 
-
-function fakeFetch(date, {signal}) {
-    return new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => {
-            //const currentMonth = date.month();
-            //const currentYear = date.year();
-            //отримуємо події з бази даних за місяцем
-            // const events = [
-            //     {
-            //         day: 25,
-            //         type: 'oil_change',
-            //         desk: 'Oil change',
-            //         carImage: car,
-            //     },
-            //
-            //     {
-            //         day: 25,
-            //         type: 'belt_change',
-            //         desk: 'Replacing belts',
-            //         carImage: mersedes_s,
-            //     },
-            //
-            //     {
-            //         day: 25,
-            //         type: 'battery_replacement',
-            //         desk: 'Scheduled battery replacement',
-            //         carImage: volvo_xc90,
-            //     },
-            //
-            //     {
-            //         day: 30,
-            //         type: 'filter_change',
-            //         desk: 'Replace filters',
-            //         carImage: bmwx5,
-            //     },
-            //     {
-            //         day: 2,
-            //         type: 'routine_maintenance',
-            //         desk: 'Scheduled maintenance',
-            //         carImage: volvo_xc90,
-            //     },
-            // ];
-            //
-            //
-            // resolve({events});
-        }, 500);
-
-        signal.onabort = () => {
-            clearTimeout(timeout);
-            reject(new DOMException('aborted', 'AbortError'));
-        };
-    });
-}
+//
+// function fakeFetch(date, {signal}) {
+//     return new Promise((resolve, reject) => {
+//         const timeout = setTimeout(() => {
+//             //const currentMonth = date.month();
+//             //const currentYear = date.year();
+//             //отримуємо події з бази даних за місяцем
+//             // const events = [
+//             //     {
+//             //         day: 25,
+//             //         type: 'oil_change',
+//             //         desk: 'Oil change',
+//             //         carImage: car,
+//             //     },
+//             //
+//             //     {
+//             //         day: 25,
+//             //         type: 'belt_change',
+//             //         desk: 'Replacing belts',
+//             //         carImage: mersedes_s,
+//             //     },
+//             //
+//             //     {
+//             //         day: 25,
+//             //         type: 'battery_replacement',
+//             //         desk: 'Scheduled battery replacement',
+//             //         carImage: volvo_xc90,
+//             //     },
+//             //
+//             //     {
+//             //         day: 30,
+//             //         type: 'filter_change',
+//             //         desk: 'Replace filters',
+//             //         carImage: bmwx5,
+//             //     },
+//             //     {
+//             //         day: 2,
+//             //         type: 'routine_maintenance',
+//             //         desk: 'Scheduled maintenance',
+//             //         carImage: volvo_xc90,
+//             //     },
+//             // ];
+//             //
+//             //
+//             // resolve({events});
+//         }, 500);
+//
+//         signal.onabort = () => {
+//             clearTimeout(timeout);
+//             reject(new DOMException('aborted', 'AbortError'));
+//         };
+//     });
+// }
 
 function equalsDates(date1, date2) {
     if (!date1)
