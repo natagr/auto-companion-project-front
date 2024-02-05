@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import image from './images/display.jpeg'
 import { infoBugs } from './infoBugs';
 import { serviceBugs } from './ServiceBugs';
@@ -44,6 +44,7 @@ import volvo_xc90 from "../components/images/volvo_xc90.png"
 import en from 'dayjs/locale/en-gb';
 import uk from 'dayjs/locale/uk';
 import dayjs from 'dayjs';
+import {request} from "../../helpers/axios_helper";
 
 
 const content = {
@@ -78,45 +79,67 @@ const content = {
 }
 
 
-
-const cars = [
-    {
-        id: 1,
-        image: car,
-        name: 'Lamborgini Urus',
-    },
-    {
-        id: 2,
-        image: audiq8,
-        name: 'Audi Q8',
-    },
-    {
-        id: 3,
-        image: bmwx5,
-        name: 'Bmw X5',
-    },
-    {
-        id: 4,
-        image: mersedes_s,
-        name: 'Mersedes S-class',
-    },
-    {
-        id: 5,
-        image: volvo_xc90,
-        name: 'Volvo XC90',
-    },
-    {
-        id: 6,
-        image: audi,
-        name: 'Audi A3',
-    },
-]
+//
+// const cars = [
+//     {
+//         id: 1,
+//         image: car,
+//         name: 'Lamborgini Urus',
+//     },
+//     {
+//         id: 2,
+//         image: audiq8,
+//         name: 'Audi Q8',
+//     },
+//     {
+//         id: 3,
+//         image: bmwx5,
+//         name: 'Bmw X5',
+//     },
+//     {
+//         id: 4,
+//         image: mersedes_s,
+//         name: 'Mersedes S-class',
+//     },
+//     {
+//         id: 5,
+//         image: volvo_xc90,
+//         name: 'Volvo XC90',
+//     },
+//     {
+//         id: 6,
+//         image: audi,
+//         name: 'Audi A3',
+//     },
+// ]
 const bugs = [emergencyBugs, serviceBugs, infoBugs];
 
 const BugsPage = ({ theme, language }) => {
     const colors = [theme.palette.error.main, theme.palette.warning.main, theme.palette.success.main];
 
     const [value, setValue] = React.useState(0);
+
+    const [cars, setCars] = useState([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+    // Функція для отримання даних про автомобілі з сервера
+    const getCars = () => {
+        console.log("Fetching cars data");
+        request("GET", "/cars/get-garage", {}).then(
+            (response) => {
+                console.log("Fetching cars data", response.data.content);
+                setCars(response.data.content);
+                setIsDataLoaded(true);
+
+            }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    useEffect(() => {
+        getCars();
+    }, []);
+
 
     function a11yProps(index) {
         return {
@@ -327,7 +350,7 @@ const StyledSelect = styled(Select)(({ theme }) => ({
                         >
                             {cars.map(car => (
 
-                                <MenuItem key={car.name} value={car.id}><img src={car.image} alt={car.name} style={{ width: '36px' }} />{'            '}{car.name}</MenuItem>
+                                <MenuItem key={car.carModel} value={car.id}><img src={audi} alt={car.carModel} style={{ width: '36px' }} />{'            '}{car.carModel}</MenuItem>
                             ))}
                         </StyledSelect>
                     </FormControl>
@@ -349,7 +372,7 @@ const StyledSelect = styled(Select)(({ theme }) => ({
                                     "label": {
                                         color: theme.palette.secondary.main
                                     },
-                                    
+
                                 }}
                                 slotProps={{
                                     layout: {
@@ -370,7 +393,7 @@ const StyledSelect = styled(Select)(({ theme }) => ({
                                             "& .css-1eyvkhb-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected)": {
                                                 borderColor: theme.palette.secondary.main,
                                             },
-                                            
+
                                         }
                                     }
                                 }}
@@ -421,4 +444,4 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     )
 }
 
-export default BugsPage
+export default BugsPage;

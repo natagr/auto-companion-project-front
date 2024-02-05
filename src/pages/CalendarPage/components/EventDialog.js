@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { eventTypes } from '../../components/eventTypes'
 import {
     Button,
@@ -49,38 +49,38 @@ import uk from 'dayjs/locale/uk';
 import { styled } from '@mui/material/styles';
 import { getUserId, request, setAuthHeader } from '../../../helpers/axios_helper';
 
-const cars = [
-    {
-        id: 1,
-        image: car,
-        name: 'Lamborgini Urus',
-    },
-    {
-        id: 2,
-        image: audiq8,
-        name: 'Audi Q8',
-    },
-    {
-        id: 3,
-        image: bmwx5,
-        name: 'Bmw X5',
-    },
-    {
-        id: 4,
-        image: mersedes_s,
-        name: 'Mersedes S-class',
-    },
-    {
-        id: 5,
-        image: volvo_xc90,
-        name: 'Volvo XC90',
-    },
-    {
-        id: 6,
-        image: audi,
-        name: 'Audi A3',
-    },
-]
+// const cars = [
+//     {
+//         id: 1,
+//         image: car,
+//         name: 'Lamborgini Urus',
+//     },
+//     {
+//         id: 2,
+//         image: audiq8,
+//         name: 'Audi Q8',
+//     },
+//     {
+//         id: 3,
+//         image: bmwx5,
+//         name: 'Bmw X5',
+//     },
+//     {
+//         id: 4,
+//         image: mersedes_s,
+//         name: 'Mersedes S-class',
+//     },
+//     {
+//         id: 5,
+//         image: volvo_xc90,
+//         name: 'Volvo XC90',
+//     },
+//     {
+//         id: 6,
+//         image: audi,
+//         name: 'Audi A3',
+//     },
+// ]
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiInputBase-input':
     {
@@ -184,6 +184,32 @@ function addEvent(event) {
 
 const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car, date, desk, setDate, setType, setCar, setDesk}) => {
 
+    const [cars, setCars] = useState([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+    // Функція для отримання даних про автомобілі з сервера
+    const getCars = () => {
+        console.log("Fetching cars data");
+        request("GET", "/cars/get-garage", {}).then(
+            (response) => {
+                console.log("Fetching cars data", response.data.content);
+                setCars(response.data.content);
+                setIsDataLoaded(true);
+
+            }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    useEffect(() => {
+        getCars();
+    }, []);
+
+
+
+
+
+
     // const [eventType, setEventType] = React.useState(initialValue.type);
     // const [eventCar, setEventCar] = React.useState(initialValue.car);
     // const [eventDate, setEventDate] = React.useState(initialValue.date);
@@ -215,6 +241,26 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
       });
 
     const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        console.log("handleButtonClick");
+
+        // Отримати значення станів
+        const eventData = {
+            type: type,
+            description: desk,
+            vinCode: car.vinCode,
+            date: date
+        };
+
+        // Виклик addEvent та передача eventData
+        addEvent(eventData);
+
+        // Потім виклик handleClickClose
+        handleClickClose();
+    };
+
+
 
 
     return (
@@ -302,7 +348,7 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                         >
                             {cars.map(car => (
 
-                                <MenuItem key={car.name} value={car.id}><img src={car.image} alt={car.name} style={{ width: '36px' }} />{'            '}{car.name}</MenuItem>
+                                <MenuItem key={car.carModel} value={car.id}><img src={audi} alt={car.carModel} style={{ width: '36px' }} />{'            '}{car.carModel}</MenuItem>
                             ))}
                         </StyledSelect>
                     </FormControl>
@@ -384,7 +430,7 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                         {content[language].do}
                     </Button>
                 }
-                <Button autoFocus onClick={handleClickClose}>
+                <Button autoFocus onClick={handleButtonClick}>
                     {content[language].save}
                 </Button>
             </DialogActions>
