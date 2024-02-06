@@ -125,26 +125,25 @@ function getMonthDays(date) {
     const daysInMonth = date.daysInMonth();
     let week = [];
 
-    let firstday = dayjs(`${date.year()}-${date.month() + 1}-1`).day() - 1;
-    if (firstday === -1) firstday = 6;
-    for (let i = 0; i < firstday; i++)
-        week[i] = null;
+    let firstday = dayjs(`${date.year()}-${date.month() + 1}-1`).day(); // Remove the - 1
+    if (firstday === 0) firstday = 7; // Adjust for Sunday being 0
+
+    for (let i = 1; i < firstday; i++)
+        week[i - 1] = null; // Adjust the index here
 
     for (let i = 1; i < daysInMonth + 1; i++) {
-        let day = dayjs(`${date.year()}-${date.month() + 1}-${i}`)
+        let day = dayjs(`${date.year()}-${date.month() + 1}-${i}`);
         let day_index = day.day() - 1;
         if (day_index === -1) {
             week[6] = day;
-            monthDays.push(week);
-            week = [];
+            monthDays.push([...week]); // Use a copy of the week array
+            week = Array(7).fill(null); // Reset week array
         } else
             week[day_index] = day;
     }
 
     if (week.length > 0) {
-        for (let i = week.length; i < 7; i++)
-            week[i] = null;
-        monthDays.push(week);
+        monthDays.push([...week]); // Use a copy of the week array
     }
 
     return monthDays;
@@ -185,8 +184,8 @@ const CalendarPage = ({theme, language}) => {
         getEvents(date.month() + 1, date.year(), controller)
             .then(events => {
                 console.log('Fetching events:', events);
-                const d = new Date(events[0].date);
-                console.log('day:',new Date(events[0].date).getDay());
+                // const d = new Date(events[0].date);
+                // console.log('date:',new Date(events[0].date));
                 setEvents(events);
                 setIsLoading(false);
             })
@@ -433,10 +432,24 @@ const CalendarPage = ({theme, language}) => {
                                                     {day.date()}
                                                 </Typography>
 
+                                                {/*{events.map((item, i) => {*/}
+                                                {/*    const eventDate = new Date(item.date);*/}
+                                                {/*    const dayDate = new Date(day); // Припускаємо, що `day` теж є датою*/}
+                                                {/*    if (eventDate.getDate() === dayDate.getDate() &&*/}
+                                                {/*        eventDate.getMonth() === dayDate.getMonth() &&*/}
+                                                {/*        eventDate.getFullYear() === dayDate.getFullYear()) {*/}
+
+
                                                 {events.map((item, i) => {
-                                                    const eventDate = new Date(item.date);
-                                                    if (eventDate.getDay() === day.date()) {
-                                                        console.log("ETTEETETET")
+                                                    const eventDate = dayjs(item.date);
+                                                    if (eventDate.date() === day.date() &&
+                                                        eventDate.month() === day.month() &&
+                                                        eventDate.year() === day.year()) {
+                                                        console.log("eventDate.getDay()"+eventDate.date())
+                                                        console.log("day.date()"+day.date())
+                                                        console.log("item.date"+item.date+"item.id"+item.id)
+
+
                                                         return (
                                                             <Badge
                                                                 anchorOrigin={{
@@ -462,8 +475,8 @@ const CalendarPage = ({theme, language}) => {
                                                                         onClick={() => {
 
                                                                             setEventType(item.type);
-                                                                            setEventCar(1);
-                                                                            setEventDate(dayjs('02-12-2023'))
+                                                                            setEventCar(item.car);
+                                                                            setEventDate(dayjs(item.date))
                                                                             setEventDesk(item.description);
 
                                                                             setIsNew(false);
@@ -492,9 +505,20 @@ const CalendarPage = ({theme, language}) => {
                                         sx={{color: theme.palette.secondary.main, textAlign: 'center'}}>
                                 {calendarValue.locale(language).format('dddd')}
                             </Typography>
+
+                            {/*{events.map((item, i) => {*/}
+                            {/*    const eventDate = new Date(item.date);*/}
+                            {/*    const dayDate = new Date(day); // Припускаємо, що `day` теж є датою*/}
+                            {/*    if (eventDate.getDate() === dayDate.getDate() &&*/}
+                            {/*        eventDate.getMonth() === dayDate.getMonth() &&*/}
+                            {/*        eventDate.getFullYear() === dayDate.getFullYear()) {*/}
+
                             {events.map((item, i) => {
                                 const eventDate1 = new Date(item.date);
-                                if (eventDate1.getDay() === calendarValue.date()) {
+                                const dayDate1 = new Date(calendarValue.date());
+                                if (eventDate1.getDate() === dayDate1.getDate() &&
+                                    eventDate1.getMonth() === dayDate1.getMonth() &&
+                                    eventDate1.getFullYear() === dayDate1.getFullYear()) {
                                     hasNonNullItem = true;
                                     return (
                                         <>
