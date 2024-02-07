@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import MiniCalendar from '../components/MiniCalendar'
 
 import dayjs from 'dayjs';
@@ -199,6 +199,28 @@ const CalendarPage = ({theme, language}) => {
         requestAbortController.current = controller;
     };
 
+    const [cars, setCars] = useState([]);
+
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+    // Функція для отримання даних про автомобілі з сервера
+    const getCars = () => {
+        console.log("Fetching cars data");
+        request("GET", "/cars/get-garage", {}).then(
+            (response) => {
+                console.log("Fetching cars data", response.data.content);
+                setCars(response.data.content);
+                setIsDataLoaded(true);
+
+            }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    useEffect(() => {
+        getCars();
+    }, []);
+
     React.useEffect(() => {
         fetchEvents(initialDay);
         return () => requestAbortController.current?.abort();
@@ -259,9 +281,9 @@ const CalendarPage = ({theme, language}) => {
             day: 'День',
             add: 'Додати подію',
             today: 'Сьогодні',
-            filter: 'Фільтр',
-            automatic: 'Автоматичні',
-            planned: 'Заплановані',
+            // filter: 'Фільтр',
+            // automatic: 'Автоматичні',
+            // planned: 'Заплановані',
             noEvents: 'Немає запланованих подій!',
         },
         en: {
@@ -270,9 +292,9 @@ const CalendarPage = ({theme, language}) => {
             day: 'Day',
             add: 'Add event',
             today: 'Today',
-            filter: 'Filter',
-            automatic: 'Automatic',
-            planned: 'Planned',
+            // filter: 'Filter',
+            // automatic: 'Automatic',
+            // planned: 'Planned',
             noEvents: 'No events scheduled!',
         },
     }
@@ -288,6 +310,7 @@ const CalendarPage = ({theme, language}) => {
             setEventCar(null);
             setEventType(null);
             setEventDesk(null);
+            setIsNew(true)
         }
         setOpenDialog(true);
     };
@@ -329,27 +352,27 @@ const CalendarPage = ({theme, language}) => {
                                       isLoading={isLoading}/>
                     </Box>
 
-                    <FormControl sx={{m: 3, width: '90%'}} component="fieldset" variant="standard">
-                        <FormLabel component="legend"
-                                   sx={{color: theme.palette.secondary.main}}>{content[language].filter}</FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={automatic} sx={{color: theme.palette.secondary.main}}
-                                              onChange={(event) => setAutomatic(event.target.checked)}
-                                              name="automatic"/>
-                                }
-                                label={content[language].automatic}
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={planned} sx={{color: theme.palette.secondary.main}}
-                                              onChange={(event) => setPlanned(event.target.checked)} name="planned"/>
-                                }
-                                label={content[language].planned}
-                            />
-                        </FormGroup>
-                    </FormControl>
+                    {/*<FormControl sx={{m: 3, width: '90%'}} component="fieldset" variant="standard">*/}
+                    {/*    <FormLabel component="legend"*/}
+                    {/*               sx={{color: theme.palette.secondary.main}}>{content[language].filter}</FormLabel>*/}
+                    {/*    <FormGroup>*/}
+                    {/*        <FormControlLabel*/}
+                    {/*            control={*/}
+                    {/*                <Checkbox checked={automatic} sx={{color: theme.palette.secondary.main}}*/}
+                    {/*                          onChange={(event) => setAutomatic(event.target.checked)}*/}
+                    {/*                          name="automatic"/>*/}
+                    {/*            }*/}
+                    {/*            label={content[language].automatic}*/}
+                    {/*        />*/}
+                    {/*        <FormControlLabel*/}
+                    {/*            control={*/}
+                    {/*                <Checkbox checked={planned} sx={{color: theme.palette.secondary.main}}*/}
+                    {/*                          onChange={(event) => setPlanned(event.target.checked)} name="planned"/>*/}
+                    {/*            }*/}
+                    {/*            label={content[language].planned}*/}
+                    {/*        />*/}
+                    {/*    </FormGroup>*/}
+                    {/*</FormControl>*/}
                 </Grid>
 
 
@@ -392,18 +415,18 @@ const CalendarPage = ({theme, language}) => {
                                 </IconButton>
                             </Tooltip>
                         </Container>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            sx={{
-                                color: theme.palette.text.primary,
-                                marginBlock: 1,
-                                width: {xs: '200px', sm: '130px'},
-                                height: '40px',
-                            }}
-                        >
-                            {isXs ? content[language].day : content[language].month}
-                        </Button>
+                        {/*<Button*/}
+                        {/*    variant="outlined"*/}
+                        {/*    size="small"*/}
+                        {/*    sx={{*/}
+                        {/*        color: theme.palette.text.primary,*/}
+                        {/*        marginBlock: 1,*/}
+                        {/*        width: {xs: '200px', sm: '130px'},*/}
+                        {/*        height: '40px',*/}
+                        {/*    }}*/}
+                        {/*>*/}
+                        {/*    {isXs ? content[language].day : content[language].month}*/}
+                        {/*</Button>*/}
                     </Container>
 
                     {!isXs &&
@@ -445,9 +468,10 @@ const CalendarPage = ({theme, language}) => {
                                                     if (eventDate.date() === day.date() &&
                                                         eventDate.month() === day.month() &&
                                                         eventDate.year() === day.year()) {
-                                                        console.log("eventDate.getDay()"+eventDate.date())
-                                                        console.log("day.date()"+day.date())
-                                                        console.log("item.date"+item.date+"item.id"+item.id)
+                                                        console.log("dima")
+                                                        // console.log("eventDate.getDay()"+eventDate.date())
+                                                        // console.log("day.date()"+day.date())
+                                                        // console.log("item.date"+item.date+"item.id"+item.id)
 
 
                                                         return (
@@ -459,7 +483,7 @@ const CalendarPage = ({theme, language}) => {
                                                                 key={i}
                                                                 overlap="circular"
                                                                 badgeContent={<img
-                                                                    src={item.carImage}
+                                                                    src={car}
                                                                     alt="Car"
                                                                     style={{width: '24px', height: '24px'}}
                                                                 />}
@@ -475,7 +499,13 @@ const CalendarPage = ({theme, language}) => {
                                                                         onClick={() => {
 
                                                                             setEventType(item.type);
-                                                                            setEventCar(item.car);
+
+                                                                            console.log("item.car"+item.vinCode)
+                                                                            const selectedCar = cars.find(car1 => car1.vinCode === item.vinCode);
+
+
+                                                                            setEventCar(selectedCar.id);
+
                                                                             setEventDate(dayjs(item.date))
                                                                             setEventDesk(item.description);
 
@@ -488,7 +518,6 @@ const CalendarPage = ({theme, language}) => {
                                                             </Badge>
                                                         );
                                                     } else {
-                                                        console.log("naat")
                                                         return null;
                                                     }
                                                 })}
@@ -519,10 +548,14 @@ const CalendarPage = ({theme, language}) => {
                                 if (eventDate1.getDate() === dayDate1.getDate() &&
                                     eventDate1.getMonth() === dayDate1.getMonth() &&
                                     eventDate1.getFullYear() === dayDate1.getFullYear()) {
+                                    console.log("dima")
+                                    // console.log("eventDate1.getDay()"+eventDate1.date())
+                                    // console.log("dayDate1.date()"+dayDate1.date())
+                                    // console.log("item.date"+item.date+"item.id"+item.id)
                                     hasNonNullItem = true;
                                     return (
                                         <>
-                                            <img alt='car' src={item.carImage}
+                                            <img alt='car' src={car}
                                                  style={{width: '40px', marginLeft: '20px'}}/>
                                             <Box sx={{
                                                 marginBlock: '5px',
@@ -549,7 +582,7 @@ const CalendarPage = ({theme, language}) => {
                                                                 car: 1,
                                                             });
                                                             setEventType(item.type);
-                                                            setEventCar(1);
+                                                            setEventCar(item.car);
                                                             setEventDate(item.date)
                                                             setEventDesk(item.description);
                                                             setIsNew(false);
@@ -561,6 +594,7 @@ const CalendarPage = ({theme, language}) => {
                                         </>
                                     );
                                 } else {
+                                    console.log("naat2")
                                     return null;
                                 }
                             })}

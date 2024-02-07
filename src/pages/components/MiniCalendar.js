@@ -13,7 +13,8 @@ import { eventTypes } from './eventTypes';
 import en from 'dayjs/locale/en-gb';
 import uk from 'dayjs/locale/uk';
 import { ukUA } from '@mui/x-date-pickers/locales';
-
+import audi from "./../components/images/audi-a3.png"
+import dayjs from "dayjs";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -42,15 +43,22 @@ function getIconByType(type) {
 function ServerDay(props) {
   const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
 
+  console.log("highlightedDays ", highlightedDays);
+  console.log("day ", day);
+  console.log("outsideCurrentMonth ", outsideCurrentMonth);
   var index = -1;
   highlightedDays.forEach((event, i) => {
-    if (event.day === day.date())
+    const eventDate = dayjs(event.date);
+    console.log("event.date ", eventDate.date());
+    console.log("day.date() ", day.date());
+    if (eventDate.date() === day.date())
       index = i;
   });
 
   const isSelected = !props.outsideCurrentMonth && index >= 0;
 
-
+  console.log("isSelected ", isSelected);
+  console.log("index ", index);
 
   return (
 
@@ -62,7 +70,7 @@ function ServerDay(props) {
       }}
         key={props.day.toString()}
         overlap="circular"
-        badgeContent={isSelected ? <img src={highlightedDays[index].carImage} alt='car' style={{width: '25px'}}/> : undefined}
+        badgeContent={isSelected ? <img src={audi} alt='car' style={{width: '25px'}}/> : undefined}
       >
         <StyledBadge
           key={props.day.toString()}

@@ -130,6 +130,11 @@ function addEvent(event) {
         date: event.date
       }).then(
         (response) => {
+            console.log(
+                "   type: event.type,\n" +event.type+
+                "          description: event.description,\n" +event.description+
+                "          vinCode: event.vinCode,\n" + event.vinCode+
+                "        date: event.date"+event.date);
           console.log(response);
         }).catch(
           (error) => {
@@ -171,6 +176,7 @@ function addEvent(event) {
         date: event.date
       }).then(
         (response) => {
+
           console.log(response);
         }).catch(
           (error) => {
@@ -185,6 +191,7 @@ function addEvent(event) {
 const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car, date, desk, setDate, setType, setCar, setDesk}) => {
 
     const [cars, setCars] = useState([]);
+
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     // Функція для отримання даних про автомобілі з сервера
@@ -222,36 +229,43 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
     //     setEventDesk(initialValue.desk);
     // }, [initialValue]);
 
-    React.useEffect(() => {
-
-        // addEvent({
-        //     type: 'oil_change',
-        //     description: 'oil change',
-        //     vinCode: 'dsgadhh',
-        //     date: dayjs(),
-        // });
-        // deleteEvent(1);
-        // changeEvent({
-        //     idEvent: 1,
-        //     type: 'oil_change',
-        //     description: 'oil change',
-        //     vinCode: 'dsgadhh',
-        //     date: dayjs(),
-        // });
-      });
+    // React.useEffect(() => {
+    //
+    //     addEvent({
+    //         type: 'oil_change',
+    //         description: 'oil change',
+    //         vinCode: 'dsgadhh',
+    //         date: dayjs(),
+    //     });
+    //     deleteEvent(1);
+    //     changeEvent({
+    //         idEvent: 1,
+    //         type: 'oil_change',
+    //         description: 'oil change',
+    //         vinCode: 'dsgadhh',
+    //         date: dayjs(),
+    //     });
+    //   });
 
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
         console.log("handleButtonClick");
-
+        const selectedCar = cars.find(car1 => car1.id === car);
+        console.log("carId"+car);
         // Отримати значення станів
         const eventData = {
             type: type,
             description: desk,
-            vinCode: car.vinCode,
+            vinCode: selectedCar.vinCode,
             date: date
         };
+
+        console.log(
+            "   type:\n" +type+
+            "          description: ,\n" +desk+
+            "          vinCode:\n" + selectedCar.vinCode+
+            "        date: "+date);
 
         // Виклик addEvent та передача eventData
         addEvent(eventData);
@@ -326,6 +340,8 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                     </FormControl>
                 </Box>
 
+
+
                 <Box sx={{ marginTop: 2 }}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label" sx={{ color: theme.palette.secondary.main }}>
@@ -337,7 +353,18 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                             id="demo-simple-select"
                             value={car}
                             label={content[language].car}
-                            onChange={(event) => setCar(event.target.value)}
+
+                            onChange={(event) => {
+                                const selectedCar = cars.find(car => car.id === event.target.value);
+                                console.log("selectedCar"+selectedCar.carModel)
+                                console.log("selectedCarVin"+selectedCar.vinCode)
+                                setCar(event.target.value);
+                                console.log("selectedCarVin"+selectedCar.vinCode)
+                            }}
+
+
+
+                            // onChange={(event) => setCar(event.target.value)}
                             MenuProps={{
                                 PaperProps: {
                                     sx: {
@@ -346,8 +373,8 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                                 }
                             }}
                         >
-                            {cars.map(car => (
 
+                            {cars.map(car => (
                                 <MenuItem key={car.carModel} value={car.id}><img src={audi} alt={car.carModel} style={{ width: '36px' }} />{'            '}{car.carModel}</MenuItem>
                             ))}
                         </StyledSelect>
