@@ -42,7 +42,9 @@ const NavigateDrawer = ({ open, handleDrawerOpen }) => {
   const drawerWidth = 280;
   const miniDrawerWidth = 65;
 
-  const icons = [<Home />, <Garage />, <CalendarMonth />, <CarCrash />, <Percent />];
+  const icons = [<Home />, <Garage />, <CalendarMonth />
+    // , <CarCrash />, <Percent />
+  ];
   const labels = {
     uk: ['Головна', 'Гараж', 'Календар', 'Помилки', 'Акції'],
     en: ['Home', 'Garage', 'Calendar', 'Bugs', 'Promotions'],
@@ -56,7 +58,7 @@ const NavigateDrawer = ({ open, handleDrawerOpen }) => {
   ]
 
   const userData = {
-    name: 'Pavlo Herasymchuk',
+    name: 'Pavlo Her',
     email: 'pavlo@gmail.com',
     avatar: avatar
   }

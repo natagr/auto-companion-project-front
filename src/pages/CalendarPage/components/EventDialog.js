@@ -1,4 +1,7 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+
+import { useNavigate } from 'react-router-dom';
+
 import { eventTypes } from '../../components/eventTypes'
 import {
     Button,
@@ -15,7 +18,7 @@ import {
     TextField,
 } from '@mui/material'
 
-import { useNavigate } from "react-router-dom";
+
 
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -49,38 +52,38 @@ import uk from 'dayjs/locale/uk';
 import { styled } from '@mui/material/styles';
 import { getUserId, request, setAuthHeader } from '../../../helpers/axios_helper';
 
-const cars = [
-    {
-        id: 1,
-        image: car,
-        name: 'Lamborgini Urus',
-    },
-    {
-        id: 2,
-        image: audiq8,
-        name: 'Audi Q8',
-    },
-    {
-        id: 3,
-        image: bmwx5,
-        name: 'Bmw X5',
-    },
-    {
-        id: 4,
-        image: mersedes_s,
-        name: 'Mersedes S-class',
-    },
-    {
-        id: 5,
-        image: volvo_xc90,
-        name: 'Volvo XC90',
-    },
-    {
-        id: 6,
-        image: audi,
-        name: 'Audi A3',
-    },
-]
+// const cars = [
+//     {
+//         id: 1,
+//         image: car,
+//         name: 'Lamborgini Urus',
+//     },
+//     {
+//         id: 2,
+//         image: audiq8,
+//         name: 'Audi Q8',
+//     },
+//     {
+//         id: 3,
+//         image: bmwx5,
+//         name: 'Bmw X5',
+//     },
+//     {
+//         id: 4,
+//         image: mersedes_s,
+//         name: 'Mersedes S-class',
+//     },
+//     {
+//         id: 5,
+//         image: volvo_xc90,
+//         name: 'Volvo XC90',
+//     },
+//     {
+//         id: 6,
+//         image: audi,
+//         name: 'Audi A3',
+//     },
+// ]
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiInputBase-input':
     {
@@ -130,6 +133,11 @@ function addEvent(event) {
         date: event.date
       }).then(
         (response) => {
+            console.log(
+                "   type: event.type,\n" +event.type+
+                "          description: event.description,\n" +event.description+
+                "          vinCode: event.vinCode,\n" + event.vinCode+
+                "        date: event.date"+event.date);
           console.log(response);
         }).catch(
           (error) => {
@@ -141,37 +149,50 @@ function addEvent(event) {
         );
   }
 // треьа зробити так як в HistoryPage.js і так всюди треба тобі треба передавати "id" пиши так "DELETE", `/history/${id}`) --->${id}`
-  function deleteEvent(idEvent) {
-    request(
-      "DELETE",
-      "/events",
-      {
-        id: idEvent,
-      }).then(
-        (response) => {
-          console.log(response);
-        }).catch(
-          (error) => {
-            // if (error.response.status === 401) {
-            //     setAuthHeader(null);
-            // }
-            console.log(error);
-          }
-        );
-  }
+//   function deleteEvent(idEvent) {
+//     request(
+//       "DELETE",
+//       "/events",
+//       {
+//         id: idEvent,
+//       }).then(
+//         (response) => {
+//           console.log(response);
+//         }).catch(
+//           (error) => {
+//             // if (error.response.status === 401) {
+//             //     setAuthHeader(null);
+//             // }
+//             console.log(error);
+//           }
+//         );
+//   }
   function changeEvent(idEvent, event) {
+
+    console.log(
+
+          "   type: event.type,\n" +event.type+
+          "          description: event.description,\n" +event.description+
+          "          vinCode: event.vinCode,\n" + event.vinCode+
+          "        date: event.date"+event.date);
     request(
       "PUT",
-      "/events",
+        `/events/${idEvent}`,
       {
-        id: idEvent,
         type: event.type,
           description: event.description,
           vinCode: event.vinCode,
         date: event.date
       }).then(
         (response) => {
-          console.log(response);
+            console.log("UPDATE");
+            console.log(
+                "   id:\n" +idEvent+
+                "   type: event.type,\n" +event.type+
+                "          description: event.description,\n" +event.description+
+                "          vinCode: event.vinCode,\n" + event.vinCode+
+                "        date: event.date"+event.date);
+
         }).catch(
           (error) => {
             // if (error.response.status === 401) {
@@ -182,7 +203,34 @@ function addEvent(event) {
         );
   }
 
-const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car, date, desk, setDate, setType, setCar, setDesk}) => {
+const EventDialog = ({ theme, language, open, isNew, handleClickClose, id, type, car, date, desk, setId, setDate, setType, setCar, setDesk}) => {
+
+    const [cars, setCars] = useState([]);
+
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+    // Функція для отримання даних про автомобілі з сервера
+    const getCars = () => {
+        console.log("Fetching cars data");
+        request("GET", "/cars/get-garage", {}).then(
+            (response) => {
+                console.log("Fetching cars data", response.data.content);
+                setCars(response.data.content);
+                setIsDataLoaded(true);
+
+            }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    useEffect(() => {
+        getCars();
+    }, []);
+
+
+
+
+
 
     // const [eventType, setEventType] = React.useState(initialValue.type);
     // const [eventCar, setEventCar] = React.useState(initialValue.car);
@@ -196,26 +244,66 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
     //     setEventDesk(initialValue.desk);
     // }, [initialValue]);
 
-    React.useEffect(() => {
+    // React.useEffect(() => {
+    //
+    //     addEvent({
+    //         type: 'oil_change',
+    //         description: 'oil change',
+    //         vinCode: 'dsgadhh',
+    //         date: dayjs(),
+    //     });
+    //     deleteEvent(1);
+    //     changeEvent({
+    //         idEvent: 1,
+    //         type: 'oil_change',
+    //         description: 'oil change',
+    //         vinCode: 'dsgadhh',
+    //         date: dayjs(),
+    //     });
+    //   });
 
-        // addEvent({
-        //     type: 'oil_change',
-        //     description: 'oil change',
-        //     vinCode: 'dsgadhh',
-        //     date: dayjs(),
-        // });
-        // deleteEvent(1);
-        // changeEvent({
-        //     idEvent: 1,
-        //     type: 'oil_change',
-        //     description: 'oil change',
-        //     vinCode: 'dsgadhh',
-        //     date: dayjs(),
-        // });
-      });
 
-    const navigate = useNavigate();
 
+    const handleButtonClick = () => {
+        console.log("handleButtonClick");
+        const selectedCar = cars.find(car1 => car1.id === car);
+        console.log("carId"+car);
+        // Отримати значення станів
+        const eventData = {
+            id: id,
+            type: type,
+            description: desk,
+            vinCode: selectedCar.vinCode,
+            date: date
+        };
+
+        console.log(
+            "   id:\n" +id+
+            "   type:\n" +type+
+            "          description: ,\n" +desk+
+            "          vinCode:\n" + selectedCar.vinCode+
+            "        date: "+date);
+
+        // Виклик addEvent та передача eventData
+        {!isNew ? changeEvent(eventData.id, eventData) : addEvent(eventData)}
+
+
+        // Потім виклик handleClickClose
+        handleClickClose();
+    };
+
+
+    const navigate = useNavigate(); // Використовуйте хук на верхньому рівні компоненту
+
+    const handleOnClick = () => {
+        const selectedCar = cars.find(car1 => car1.id === car);
+        console.log("car", selectedCar);
+        console.log("carModel", selectedCar.carModel);
+        // Передача об'єкта `selectedCar` через стан маршруту
+
+        navigate(`/history/${selectedCar.vinCode}/${selectedCar.carModel}/${selectedCar.carModel}`, { state: { selectedCar } });
+
+    };
 
     return (
         <Dialog
@@ -280,6 +368,8 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                     </FormControl>
                 </Box>
 
+
+
                 <Box sx={{ marginTop: 2 }}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label" sx={{ color: theme.palette.secondary.main }}>
@@ -291,7 +381,18 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                             id="demo-simple-select"
                             value={car}
                             label={content[language].car}
-                            onChange={(event) => setCar(event.target.value)}
+
+                            onChange={(event) => {
+                                const selectedCar = cars.find(car => car.id === event.target.value);
+                                console.log("selectedCar"+selectedCar.carModel)
+                                console.log("selectedCarVin"+selectedCar.vinCode)
+                                setCar(event.target.value);
+                                console.log("selectedCarVin"+selectedCar.vinCode)
+                            }}
+
+
+
+                            // onChange={(event) => setCar(event.target.value)}
                             MenuProps={{
                                 PaperProps: {
                                     sx: {
@@ -300,9 +401,9 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
                                 }
                             }}
                         >
-                            {cars.map(car => (
 
-                                <MenuItem key={car.name} value={car.id}><img src={car.image} alt={car.name} style={{ width: '36px' }} />{'            '}{car.name}</MenuItem>
+                            {cars.map(car => (
+                                <MenuItem key={car.carModel} value={car.id}><img src={audi} alt={car.carModel} style={{ width: '36px' }} />{'            '}{car.carModel}</MenuItem>
                             ))}
                         </StyledSelect>
                     </FormControl>
@@ -380,11 +481,13 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
             </DialogContent>
             <DialogActions>
                 {!isNew &&
-                    <Button autoFocus onClick={()=>navigate('/history')}>
+                    <Button autoFocus onClick={handleOnClick}>
                         {content[language].do}
                     </Button>
+
+
                 }
-                <Button autoFocus onClick={handleClickClose}>
+                <Button autoFocus onClick={handleButtonClick}>
                     {content[language].save}
                 </Button>
             </DialogActions>

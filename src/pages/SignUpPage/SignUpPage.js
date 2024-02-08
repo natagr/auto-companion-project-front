@@ -63,6 +63,8 @@ const SignUpPage = ({ theme, language, setLogged }) => {
                         setAuthHeader(null);
                     }
                 );
+
+        navigate('/');
     };
 
     const handleSubmitAvatar = (event) => {
@@ -130,6 +132,7 @@ const SignUpPage = ({ theme, language, setLogged }) => {
     const [errorEmail, setErrorEmail] = React.useState(false);
     const [errorPassword, setErrorPassword] = React.useState(false);
 
+
     return (
         <Grid container component="main" sx={{ height: '100vh' }} >
             <CssBaseline />
@@ -146,6 +149,8 @@ const SignUpPage = ({ theme, language, setLogged }) => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}
+
+
             />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square sx={{ backgroundColor: theme.palette.background.default }}>
                 <Box
@@ -159,7 +164,7 @@ const SignUpPage = ({ theme, language, setLogged }) => {
                 >
                     <Avatar sx={{ m: 1 }} src={selectedImage ? URL.createObjectURL(selectedImage) : avatar} />
                     <Typography component="h1" variant="h5">
-                        {register ? content[language].signUp : content[language].avatar}
+                        {content[language].signUp }
                     </Typography>
                     {register &&
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -208,12 +213,12 @@ const SignUpPage = ({ theme, language, setLogged }) => {
                                         error={errorPassword}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <FormControlLabel
-                                        control={<Checkbox value="allowExtraEmails" sx={{ color: theme.palette.secondary.main }} />}
-                                        label={content[language].reseiveProm}
-                                    />
-                                </Grid>
+                                {/*<Grid item xs={12}>*/}
+                                {/*    <FormControlLabel*/}
+                                {/*        control={<Checkbox value="allowExtraEmails" sx={{ color: theme.palette.secondary.main }} />}*/}
+                                {/*        label={content[language].reseiveProm}*/}
+                                {/*    />*/}
+                                {/*</Grid>*/}
                             </Grid>
                             <Button
                                 type="submit"
@@ -232,21 +237,21 @@ const SignUpPage = ({ theme, language, setLogged }) => {
                             </Grid>
                         </Box>
                     }
-                    {!register &&
+                    {/*{!register &&*/}
 
-                        <Box width='100%' component="form" onSubmit={handleSubmitAvatar} sx={{ mt: 3 }}>
-                            <ImageInput language={language} theme={theme} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
+                    {/*    <Box width='100%' component="form" onSubmit={handleSubmitAvatar} sx={{ mt: 3 }}>*/}
+                    {/*        <ImageInput language={language} theme={theme} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />*/}
 
-                            <Button
-                                type='submit'
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                {content[language].upload}
-                            </Button>
-                        </Box>
-                    }
+                    {/*        <Button*/}
+                    {/*            type='submit'*/}
+                    {/*            fullWidth*/}
+                    {/*            variant="contained"*/}
+                    {/*            sx={{ mt: 3, mb: 2 }}*/}
+                    {/*        >*/}
+                    {/*            {content[language].upload}*/}
+                    {/*        </Button>*/}
+                    {/*    </Box>*/}
+                    {/*}*/}
                 </Box>
             </Grid>
         </Grid >

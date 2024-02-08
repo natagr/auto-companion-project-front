@@ -73,7 +73,7 @@ function App() {
 
             <Route path="vehicle/:vin" element={<VinPage theme={theme} language={language} IsInGarage={false}/>}/>
             <Route path="garage/:vin" element={<VinPage theme={theme} language={language} IsInGarage={true}/>}/>
-            <Route path="history" element={<HistoryPage theme={theme} language={language} car={car} vin='ZPBUA1ZL9KLA00848' make='Lamborghini' model='Urus'/>}/>
+            <Route path="history/:vin/:make/:model" element={<HistoryPage theme={theme} language={language} />} />
             <Route path="pricing" element={<PricingPage />}/>
           </Route>
           

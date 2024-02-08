@@ -1,4 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+
+import { useLocation } from 'react-router-dom';
+
+import { useParams } from 'react-router-dom';
 import {
     Container,
     Typography, Grid,
@@ -13,6 +17,8 @@ import {
     ListItem,
     Button,
 } from '@mui/material';
+
+import carImage from "../components/images/car.png"
 
 import { getUserId, request, setAuthHeader } from '../../helpers/axios_helper';
 
@@ -50,41 +56,41 @@ function getColorByType(type) {
     return color;
 }
 
-const events = [
-    {
-        date: '25.11.2023',
-        type: 'oil_change',
-        desk: 'Oil change',
-    },
-
-    {
-        date: '25.10.2023',
-        type: 'belt_change',
-        desk: 'Replacing belts',
-    },
-
-    {
-        date: '25.11.2022',
-        type: 'battery_replacement',
-        desk: 'Scheduled battery replacement',
-    },
-
-    {
-        date: '30.09.2022',
-        type: 'ac_refill',
-        desk: 'Filling the air conditioner',
-    },
-    {
-        date: '02.09.2022',
-        type: 'routine_maintenance',
-        desk: 'Scheduled maintenance',
-    },
-];
+// const events = [
+//     {
+//         date: '25.11.2023',
+//         type: 'oil_change',
+//         desk: 'Oil change',
+//     },
+//
+//     {
+//         date: '25.10.2023',
+//         type: 'belt_change',
+//         desk: 'Replacing belts',
+//     },
+//
+//     {
+//         date: '25.11.2022',
+//         type: 'battery_replacement',
+//         desk: 'Scheduled battery replacement',
+//     },
+//
+//     {
+//         date: '30.09.2022',
+//         type: 'ac_refill',
+//         desk: 'Filling the air conditioner',
+//     },
+//     {
+//         date: '02.09.2022',
+//         type: 'routine_maintenance',
+//         desk: 'Scheduled maintenance',
+//     },
+// ];
 
 const EditEvent = {
-    date: '01.12.2023',
-    type: 'routine_maintenance',
-    desk: 'Scheduled maintenance',
+    date: '20.02.2024',
+    type: 'belt_change',
+    desk: '20лютогоPQR789',
 };
 
 const content = {
@@ -133,29 +139,49 @@ function deleteNote(id) {
 }
 
 
-function getHistory(vinCode) {
-    request("GET", `/history?vinCode=${vinCode}`)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-}
 
-const HistoryPage = ({ theme, language, car, vin, make, model }) => {
+
+const HistoryPage = ({ theme, language }) => {
+    const [events, setEvents] = useState([]);
+
+    const { vin, make, model } = useParams();
+
+
+    const location = useLocation();
+    let car = location.state?.selectedCar;
+
+
+    console.log("car", car );
+    console.log("vin", vin );
+    console.log("make", make );
+    console.log("model", model);
+    const getHistory=(vinC) =>{
+
+        request("GET", `/history?vinCode=${vinC}`)
+            .then(response => {
+                console.log("history", response.data.content);
+
+                setEvents(response.data.content);
+                console.log("events", events);
+
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
     React.useEffect(() => {
-        addNote({
-            type: 'oil_change',
-            description: 'oil change',
-            vinCode: 'ZPBUA1ZL9KLA00848',
-            date: dayjs(),
-        });
+        // addNote({
+        //     type: 'belt_change',
+        //     description: 'belt_change',
+        //     vinCode: 'PQR789',
+        //     date: dayjs(),
+        // });
 
-        getHistory('ZPBUA1ZL9KLA00848');
+        getHistory(vin);
+
         deleteNote(1);
-    });
+    }, [vin]);
 
     const initialStateArray = Array.from({ length: events.length }, () => false);
     const [open, setOpen] = React.useState(initialStateArray);
@@ -182,7 +208,7 @@ const HistoryPage = ({ theme, language, car, vin, make, model }) => {
     return (
         <Grid container spacing={5} sx={{ paddingLeft: { xs: 0, md: 20 }, paddingRight: { xs: 0, md: 20 }, }}>
             <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={car} alt='car' style={{ width: '50%' }} />
+                <img src={carImage} alt='car' style={{ width: '50%' }} />
             </Grid>
             <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <Typography
@@ -191,7 +217,8 @@ const HistoryPage = ({ theme, language, car, vin, make, model }) => {
                     component="div"
                     color={theme.palette.text.main}
                 >
-                    {make}{' '}{model}
+                    {make}
+                    {/*{' '}{model}*/}
                 </Typography>
                 <Typography
                     gutterBottom
@@ -221,34 +248,34 @@ const HistoryPage = ({ theme, language, car, vin, make, model }) => {
                                     {getIconByType(EditEvent.type)}
                                 </ListItemIcon>
                                 <ListItemText primary={EditEvent.desk} secondary={EditEvent.date} sx={{ '& .MuiListItemText-secondary': { color: theme.palette.secondary.main } }} />
-                                {editColl ? <ExpandLess /> : <ExpandMore />}
+                                {/*{editColl ? <ExpandLess /> : <ExpandMore />}*/}
                             </ListItemButton>
 
-                            <Collapse key={`collapse0`} in={editColl} timeout="auto" unmountOnExit>
-                                {edit &&
-                                    <Container>
-                                        <Editor theme={theme} placeholder={content[language].placeholder} editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
-                                        <Container sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }} disableGutters>
-                                            <Button
-                                                variant="outlined"
-                                                size="medium"
-                                                onClick={save}
-                                                sx={{
-                                                    color: theme.palette.primary.main,
-                                                }}
-                                            >
-                                                {content[language].save}
-                                            </Button>
-                                        </Container>
+                            {/*<Collapse key={`collapse0`} in={editColl} timeout="auto" unmountOnExit>*/}
+                            {/*    {edit &&*/}
+                            {/*        <Container>*/}
+                            {/*            <Editor theme={theme} placeholder={content[language].placeholder} editorHtml={editorHtml} setEditorHtml={setEditorHtml} />*/}
+                            {/*            <Container sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }} disableGutters>*/}
+                            {/*                <Button*/}
+                            {/*                    variant="outlined"*/}
+                            {/*                    size="medium"*/}
+                            {/*                    onClick={save}*/}
+                            {/*                    sx={{*/}
+                            {/*                        color: theme.palette.primary.main,*/}
+                            {/*                    }}*/}
+                            {/*                >*/}
+                            {/*                    {content[language].save}*/}
+                            {/*                </Button>*/}
+                            {/*            </Container>*/}
 
-                                    </Container>
-                                }
-                                {!edit &&
-                                    <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>
+                            {/*        </Container>*/}
+                            {/*    }*/}
+                            {/*    {!edit &&*/}
+                            {/*        <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>*/}
 
-                                    </Container>
-                                }
-                            </Collapse>
+                            {/*        </Container>*/}
+                            {/*    }*/}
+                            {/*</Collapse>*/}
 
 
 
@@ -259,14 +286,40 @@ const HistoryPage = ({ theme, language, car, vin, make, model }) => {
                                         <ListItemIcon sx={{ color: getColorByType(item.type) }}>
                                             {getIconByType(item.type)}
                                         </ListItemIcon>
-                                        <ListItemText primary={item.desk} secondary={item.date} sx={{ '& .MuiListItemText-secondary': { color: theme.palette.secondary.main } }} />
-                                        {open[index] ? <ExpandLess /> : <ExpandMore />}
-                                    </ListItemButton>
-                                    <Collapse key={`collapse${index + 1}`} in={open[index]} timeout="auto" unmountOnExit>
-                                        <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>
+                                        <ListItemText primary={item.description} secondary={item.date} sx={{ '& .MuiListItemText-secondary': { color: theme.palette.secondary.main } }} />
+                                        {/*{open[index] ? <ExpandLess /> : <ExpandMore />}*/}
 
-                                        </Container>
-                                    </Collapse>
+                                    </ListItemButton>
+                                    {/*<Collapse key={`collapse${index + 1}`} in={open[index]} timeout="auto" unmountOnExit>*/}
+                                    {/*    <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>*/}
+
+                                    {/*    </Container>*/}
+                                    {/*</Collapse>*/}
+                                    {/*<Collapse key={`collapse${index + 1}`} in={open[index]} timeout="auto" unmountOnExit>*/}
+                                    {/*    {edit &&*/}
+                                    {/*        <Container>*/}
+                                    {/*            <Editor theme={theme} placeholder={content[language].placeholder} editorHtml={editorHtml} setEditorHtml={setEditorHtml} />*/}
+                                    {/*            <Container sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }} disableGutters>*/}
+                                    {/*                <Button*/}
+                                    {/*                    variant="outlined"*/}
+                                    {/*                    size="medium"*/}
+                                    {/*                    onClick={save}*/}
+                                    {/*                    sx={{*/}
+                                    {/*                        color: theme.palette.primary.main,*/}
+                                    {/*                    }}*/}
+                                    {/*                >*/}
+                                    {/*                    {content[language].save}*/}
+                                    {/*                </Button>*/}
+                                    {/*            </Container>*/}
+
+                                    {/*        </Container>*/}
+                                    {/*    }*/}
+                                    {/*    {!edit &&*/}
+                                    {/*        <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>*/}
+
+                                    {/*        </Container>*/}
+                                    {/*    }*/}
+                                    {/*</Collapse>*/}
                                 </>
 
                             ))}

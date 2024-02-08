@@ -140,10 +140,10 @@ export default function SignInPage({ theme, language, setLogged }) {
               error={errorMessage!==''}
               helperText={errorMessage}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" sx={{ color: theme.palette.secondary.main }} />}
-              label={content[language].remember}
-            />
+            {/*<FormControlLabel*/}
+            {/*  control={<Checkbox value="remember" sx={{ color: theme.palette.secondary.main }} />}*/}
+            {/*  label={content[language].remember}*/}
+            {/*/>*/}
             <Button
               type="submit"
               fullWidth
