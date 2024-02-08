@@ -181,24 +181,28 @@ const UserProfile = ( ) => {
             <Typography variant="h6" component="div" color="White" align="center">
               <div>{user.email}</div>
             </Typography>
-            <label htmlFor="avatar-upload">
-              <input
-                style={{ display: 'none' }}
-                accept="image/*"
-                id="avatar-upload"
-                type="file"
-                onChange={handleAvatarChange}
-              />
-              <Button sx={{ width: 220, display: 'center', mt: 10, /*color: 'White'*/ }} variant="text" component="span">
-                {content[language].photo}
-                <AddPhotoAlternateIcon />
-              </Button>
-            </label>
-            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-              <MenuItem onClick={handleDeletePhoto} sx={{ color: '#333333' }}>
-                {content[language].del}
-              </MenuItem>
-            </Menu>
+            {/*<label htmlFor="avatar-upload">*/}
+            {/*  <input*/}
+            {/*    style={{ display: 'none' }}*/}
+            {/*    accept="image/*"*/}
+            {/*    id="avatar-upload"*/}
+            {/*    type="file"*/}
+            {/*    onChange={handleAvatarChange}*/}
+            {/*  />*/}
+            {/*  <Button sx={{ width: 220, display: 'center', mt: 10, }} variant="text" component="span">*/}
+            {/*    {content[language].photo}*/}
+            {/*    <AddPhotoAlternateIcon />*/}
+            {/*  </Button>*/}
+            {/*</label>*/}
+            <Button sx={{ width: 220, display: 'center', mt: 6, /*color: 'White'*/ }} variant="text" component="span">
+              {content[language].photo}
+              <AddPhotoAlternateIcon />
+            </Button>
+            {/*<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>*/}
+            {/*  <MenuItem onClick={handleDeletePhoto} sx={{ color: '#333333' }}>*/}
+            {/*    {content[language].del}*/}
+            {/*  </MenuItem>*/}
+            {/*</Menu>*/}
             <Button sx={{ width: 220, display: 'center', mt: 1, /*color: 'White'*/ }} variant="text" component="span">
               {content[language].wal}
               <AccountBalanceWalletIcon />

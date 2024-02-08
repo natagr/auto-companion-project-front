@@ -248,34 +248,34 @@ const HistoryPage = ({ theme, language }) => {
                                     {getIconByType(EditEvent.type)}
                                 </ListItemIcon>
                                 <ListItemText primary={EditEvent.desk} secondary={EditEvent.date} sx={{ '& .MuiListItemText-secondary': { color: theme.palette.secondary.main } }} />
-                                {editColl ? <ExpandLess /> : <ExpandMore />}
+                                {/*{editColl ? <ExpandLess /> : <ExpandMore />}*/}
                             </ListItemButton>
 
-                            <Collapse key={`collapse0`} in={editColl} timeout="auto" unmountOnExit>
-                                {edit &&
-                                    <Container>
-                                        <Editor theme={theme} placeholder={content[language].placeholder} editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
-                                        <Container sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }} disableGutters>
-                                            <Button
-                                                variant="outlined"
-                                                size="medium"
-                                                onClick={save}
-                                                sx={{
-                                                    color: theme.palette.primary.main,
-                                                }}
-                                            >
-                                                {content[language].save}
-                                            </Button>
-                                        </Container>
+                            {/*<Collapse key={`collapse0`} in={editColl} timeout="auto" unmountOnExit>*/}
+                            {/*    {edit &&*/}
+                            {/*        <Container>*/}
+                            {/*            <Editor theme={theme} placeholder={content[language].placeholder} editorHtml={editorHtml} setEditorHtml={setEditorHtml} />*/}
+                            {/*            <Container sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }} disableGutters>*/}
+                            {/*                <Button*/}
+                            {/*                    variant="outlined"*/}
+                            {/*                    size="medium"*/}
+                            {/*                    onClick={save}*/}
+                            {/*                    sx={{*/}
+                            {/*                        color: theme.palette.primary.main,*/}
+                            {/*                    }}*/}
+                            {/*                >*/}
+                            {/*                    {content[language].save}*/}
+                            {/*                </Button>*/}
+                            {/*            </Container>*/}
 
-                                    </Container>
-                                }
-                                {!edit &&
-                                    <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>
+                            {/*        </Container>*/}
+                            {/*    }*/}
+                            {/*    {!edit &&*/}
+                            {/*        <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>*/}
 
-                                    </Container>
-                                }
-                            </Collapse>
+                            {/*        </Container>*/}
+                            {/*    }*/}
+                            {/*</Collapse>*/}
 
 
 
@@ -287,7 +287,7 @@ const HistoryPage = ({ theme, language }) => {
                                             {getIconByType(item.type)}
                                         </ListItemIcon>
                                         <ListItemText primary={item.description} secondary={item.date} sx={{ '& .MuiListItemText-secondary': { color: theme.palette.secondary.main } }} />
-                                        {open[index] ? <ExpandLess /> : <ExpandMore />}
+                                        {/*{open[index] ? <ExpandLess /> : <ExpandMore />}*/}
 
                                     </ListItemButton>
                                     {/*<Collapse key={`collapse${index + 1}`} in={open[index]} timeout="auto" unmountOnExit>*/}
@@ -295,31 +295,31 @@ const HistoryPage = ({ theme, language }) => {
 
                                     {/*    </Container>*/}
                                     {/*</Collapse>*/}
-                                    <Collapse key={`collapse${index + 1}`} in={open[index]} timeout="auto" unmountOnExit>
-                                        {edit &&
-                                            <Container>
-                                                <Editor theme={theme} placeholder={content[language].placeholder} editorHtml={editorHtml} setEditorHtml={setEditorHtml} />
-                                                <Container sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }} disableGutters>
-                                                    <Button
-                                                        variant="outlined"
-                                                        size="medium"
-                                                        onClick={save}
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                        }}
-                                                    >
-                                                        {content[language].save}
-                                                    </Button>
-                                                </Container>
+                                    {/*<Collapse key={`collapse${index + 1}`} in={open[index]} timeout="auto" unmountOnExit>*/}
+                                    {/*    {edit &&*/}
+                                    {/*        <Container>*/}
+                                    {/*            <Editor theme={theme} placeholder={content[language].placeholder} editorHtml={editorHtml} setEditorHtml={setEditorHtml} />*/}
+                                    {/*            <Container sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }} disableGutters>*/}
+                                    {/*                <Button*/}
+                                    {/*                    variant="outlined"*/}
+                                    {/*                    size="medium"*/}
+                                    {/*                    onClick={save}*/}
+                                    {/*                    sx={{*/}
+                                    {/*                        color: theme.palette.primary.main,*/}
+                                    {/*                    }}*/}
+                                    {/*                >*/}
+                                    {/*                    {content[language].save}*/}
+                                    {/*                </Button>*/}
+                                    {/*            </Container>*/}
 
-                                            </Container>
-                                        }
-                                        {!edit &&
-                                            <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>
+                                    {/*        </Container>*/}
+                                    {/*    }*/}
+                                    {/*    {!edit &&*/}
+                                    {/*        <Container dangerouslySetInnerHTML={{ __html: loadedHtml }}>*/}
 
-                                            </Container>
-                                        }
-                                    </Collapse>
+                                    {/*        </Container>*/}
+                                    {/*    }*/}
+                                    {/*</Collapse>*/}
                                 </>
 
                             ))}
