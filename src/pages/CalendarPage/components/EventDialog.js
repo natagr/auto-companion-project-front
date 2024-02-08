@@ -1,4 +1,7 @@
 import React, {useEffect, useState} from 'react'
+
+import { useNavigate } from 'react-router-dom';
+
 import { eventTypes } from '../../components/eventTypes'
 import {
     Button,
@@ -15,7 +18,7 @@ import {
     TextField,
 } from '@mui/material'
 
-import { useNavigate } from "react-router-dom";
+
 
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -146,38 +149,50 @@ function addEvent(event) {
         );
   }
 // треьа зробити так як в HistoryPage.js і так всюди треба тобі треба передавати "id" пиши так "DELETE", `/history/${id}`) --->${id}`
-  function deleteEvent(idEvent) {
-    request(
-      "DELETE",
-      "/events",
-      {
-        id: idEvent,
-      }).then(
-        (response) => {
-          console.log(response);
-        }).catch(
-          (error) => {
-            // if (error.response.status === 401) {
-            //     setAuthHeader(null);
-            // }
-            console.log(error);
-          }
-        );
-  }
+//   function deleteEvent(idEvent) {
+//     request(
+//       "DELETE",
+//       "/events",
+//       {
+//         id: idEvent,
+//       }).then(
+//         (response) => {
+//           console.log(response);
+//         }).catch(
+//           (error) => {
+//             // if (error.response.status === 401) {
+//             //     setAuthHeader(null);
+//             // }
+//             console.log(error);
+//           }
+//         );
+//   }
   function changeEvent(idEvent, event) {
+
+    console.log(
+
+          "   type: event.type,\n" +event.type+
+          "          description: event.description,\n" +event.description+
+          "          vinCode: event.vinCode,\n" + event.vinCode+
+          "        date: event.date"+event.date);
     request(
       "PUT",
-      "/events",
+        `/events/${idEvent}`,
       {
-        id: idEvent,
         type: event.type,
           description: event.description,
           vinCode: event.vinCode,
         date: event.date
       }).then(
         (response) => {
+            console.log("UPDATE");
+            console.log(
+                "   id:\n" +idEvent+
+                "   type: event.type,\n" +event.type+
+                "          description: event.description,\n" +event.description+
+                "          vinCode: event.vinCode,\n" + event.vinCode+
+                "        date: event.date"+event.date);
 
-          console.log(response);
         }).catch(
           (error) => {
             // if (error.response.status === 401) {
@@ -188,7 +203,7 @@ function addEvent(event) {
         );
   }
 
-const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car, date, desk, setDate, setType, setCar, setDesk}) => {
+const EventDialog = ({ theme, language, open, isNew, handleClickClose, id, type, car, date, desk, setId, setDate, setType, setCar, setDesk}) => {
 
     const [cars, setCars] = useState([]);
 
@@ -247,7 +262,7 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
     //     });
     //   });
 
-    const navigate = useNavigate();
+
 
     const handleButtonClick = () => {
         console.log("handleButtonClick");
@@ -255,6 +270,7 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
         console.log("carId"+car);
         // Отримати значення станів
         const eventData = {
+            id: id,
             type: type,
             description: desk,
             vinCode: selectedCar.vinCode,
@@ -262,20 +278,32 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
         };
 
         console.log(
+            "   id:\n" +id+
             "   type:\n" +type+
             "          description: ,\n" +desk+
             "          vinCode:\n" + selectedCar.vinCode+
             "        date: "+date);
 
         // Виклик addEvent та передача eventData
-        addEvent(eventData);
+        {!isNew ? changeEvent(eventData.id, eventData) : addEvent(eventData)}
+
 
         // Потім виклик handleClickClose
         handleClickClose();
     };
 
 
+    const navigate = useNavigate(); // Використовуйте хук на верхньому рівні компоненту
 
+    const handleOnClick = () => {
+        const selectedCar = cars.find(car1 => car1.id === car);
+        console.log("car", selectedCar);
+        console.log("carModel", selectedCar.carModel);
+        // Передача об'єкта `selectedCar` через стан маршруту
+
+        navigate(`/history/${selectedCar.vinCode}/${selectedCar.carModel}/${selectedCar.carModel}`, { state: { selectedCar } });
+
+    };
 
     return (
         <Dialog
@@ -453,9 +481,11 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, type, car
             </DialogContent>
             <DialogActions>
                 {!isNew &&
-                    <Button autoFocus onClick={()=>navigate('/history')}>
+                    <Button autoFocus onClick={handleOnClick}>
                         {content[language].do}
                     </Button>
+
+
                 }
                 <Button autoFocus onClick={handleButtonClick}>
                     {content[language].save}

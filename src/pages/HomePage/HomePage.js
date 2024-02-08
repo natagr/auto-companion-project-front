@@ -308,7 +308,9 @@ const HomePage = ({ theme, language }) => {
                     </HomeCard>
 
 
-                    <HomeCard theme={theme} title={content[language].prom} navigateTo={'promotion'} marginTop={10}>
+                    <HomeCard theme={theme} title={content[language].prom}
+                              // navigateTo={'promotion'}
+                              marginTop={10}>
                         <Stack direction="row" spacing={2}>
                             {parts.map((part, index) => (
                                 <Card key={index} sx={{ background: theme.palette.background.default, width: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>

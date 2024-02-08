@@ -2,6 +2,10 @@ import React, {useEffect, useState} from 'react'
 import MiniCalendar from '../components/MiniCalendar'
 
 import dayjs from 'dayjs';
+
+
+
+
 import en from 'dayjs/locale/en-gb';
 import uk from 'dayjs/locale/uk';
 
@@ -169,6 +173,8 @@ function getEvents(month, year) {
         });
 }
 
+
+
 const CalendarPage = ({theme, language}) => {
     const [initialDay, setInitialDay] = React.useState(dayjs());
     const [calendarValue, setCalendarValue] = React.useState(dayjs());
@@ -255,9 +261,11 @@ const CalendarPage = ({theme, language}) => {
         if (isXs) {
 
             let date = calendarValue.subtract(1, 'day');
+            console.log("date ", date);
             setCalendarValue(date);
         } else {
             let date = initialDay.subtract(1, 'month').startOf('month');
+            console.log("date ", date);
             setCalendarValue(date);
             handleMonthChange(date);
         }
@@ -266,9 +274,11 @@ const CalendarPage = ({theme, language}) => {
     const handleForwardClick = () => {
         if (isXs) {
             let date = calendarValue.add(1, 'day');
+            console.log("date ", date);
             setCalendarValue(date);
         } else {
             let date = initialDay.add(1, 'month').startOf('month');
+            console.log("date ", date);
             setCalendarValue(date);
             handleMonthChange(date);
         }
@@ -322,6 +332,7 @@ const CalendarPage = ({theme, language}) => {
     let hasNonNullItem = false;
     const [initialEvent, setInitialEvent] = React.useState({date: calendarValue});
 
+    const [eventId, setEventId] = React.useState();
     const [eventType, setEventType] = React.useState();
     const [eventCar, setEventCar] = React.useState();
     const [eventDate, setEventDate] = React.useState();
@@ -468,7 +479,7 @@ const CalendarPage = ({theme, language}) => {
                                                     if (eventDate.date() === day.date() &&
                                                         eventDate.month() === day.month() &&
                                                         eventDate.year() === day.year()) {
-                                                        console.log("dima")
+                                                        // console.log("dima")
                                                         // console.log("eventDate.getDay()"+eventDate.date())
                                                         // console.log("day.date()"+day.date())
                                                         // console.log("item.date"+item.date+"item.id"+item.id)
@@ -498,6 +509,7 @@ const CalendarPage = ({theme, language}) => {
                                                                 }}
                                                                         onClick={() => {
 
+                                                                            setEventId(item.id);
                                                                             setEventType(item.type);
 
                                                                             console.log("item.car"+item.vinCode)
@@ -506,7 +518,7 @@ const CalendarPage = ({theme, language}) => {
 
                                                                             setEventCar(selectedCar.id);
 
-                                                                            setEventDate(dayjs(item.date))
+                                                                            setEventDate(dayjs(item.date));
                                                                             setEventDesk(item.description);
 
                                                                             setIsNew(false);
@@ -543,12 +555,25 @@ const CalendarPage = ({theme, language}) => {
                             {/*        eventDate.getFullYear() === dayDate.getFullYear()) {*/}
 
                             {events.map((item, i) => {
-                                const eventDate1 = new Date(item.date);
-                                const dayDate1 = new Date(calendarValue.date());
-                                if (eventDate1.getDate() === dayDate1.getDate() &&
-                                    eventDate1.getMonth() === dayDate1.getMonth() &&
-                                    eventDate1.getFullYear() === dayDate1.getFullYear()) {
-                                    console.log("dima")
+                                const eventDate1 = dayjs(item.date);
+                                // const dayDate1 = dayjs(calendarValue);
+                                console.log("XS")
+                                console.log("eventDate1 ", eventDate1)
+
+                                console.log("calendarValue ", calendarValue)
+
+                                console.log("eventDate1.getDate() ", eventDate1.date())
+                                console.log("calendarValue.getDate() ", calendarValue.date())
+                                console.log("eventDate1.getMonth() ", eventDate1.month())
+                                console.log("calendarValue.getMonth() ", calendarValue.month())
+                                console.log("eventDate1.getFullYear() ", eventDate1.year())
+                                console.log("calendarValue.getFullYear() ", calendarValue.year())
+
+                                if (eventDate1.date() === calendarValue.date() &&
+                                    eventDate1.month() === calendarValue.month() &&
+                                    eventDate1.year() === calendarValue.year()) {
+
+                                    console.log("xsIF")
                                     // console.log("eventDate1.getDay()"+eventDate1.date())
                                     // console.log("dayDate1.date()"+dayDate1.date())
                                     // console.log("item.date"+item.date+"item.id"+item.id)
@@ -581,9 +606,17 @@ const CalendarPage = ({theme, language}) => {
                                                                 desk: item.description,
                                                                 car: 1,
                                                             });
+
+                                                            setEventId(item.id);
+
                                                             setEventType(item.type);
-                                                            setEventCar(item.car);
-                                                            setEventDate(item.date)
+
+                                                            console.log("item.car"+item.vinCode)
+                                                            const selectedCar = cars.find(car1 => car1.vinCode === item.vinCode);
+
+
+                                                            setEventCar(selectedCar.id);
+                                                            setEventDate(dayjs(item.date));
                                                             setEventDesk(item.description);
                                                             setIsNew(false);
                                                             handleClickOpenDialog(false);
@@ -611,8 +644,8 @@ const CalendarPage = ({theme, language}) => {
             </Grid>
 
             <EventDialog theme={theme} language={language} open={openDialog} isNew={isNew}
-                         handleClickClose={handleClickCloseDialog} date={eventDate} type={eventType} car={eventCar}
-                         desk={eventDesk} setDate={setEventDate} setType={setEventType} setCar={setEventCar}
+                         handleClickClose={handleClickCloseDialog} id={eventId} date={eventDate} type={eventType} car={eventCar}
+                         desk={eventDesk} setId={{setEventId}} setDate={setEventDate} setType={setEventType} setCar={setEventCar}
                          setDesk={setEventDesk}/>
         </>
     )

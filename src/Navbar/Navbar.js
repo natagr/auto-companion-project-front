@@ -260,9 +260,9 @@ export default function Navbar({ logged }) {
                 aria-label="show 17 new notifications"
                 color="inherit"
               >
-                <Badge badgeContent={1} color="error">
-                  <NotificationsIcon />
-                </Badge>
+                {/*<Badge badgeContent={1} color="error">*/}
+                {/*  <NotificationsIcon />*/}
+                {/*</Badge>*/}
               </IconButton>
 
             }

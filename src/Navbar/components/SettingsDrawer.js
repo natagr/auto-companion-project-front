@@ -153,20 +153,20 @@ const SettingsDrawer = ({ open, handleSettingsOpen }) => {
             </ToggleButton>
           </StyledToggleButtonGroup>
 
-          <StyledTypography>{content[language].theme}</StyledTypography>
-          <StyledToggleButtonGroup
-            value={selectTheme}
-            change={handleChangeTheme}
-          >
-            <ToggleButton value="dark" sx={styles.ToggleButton}>
-              <DarkModeOutlinedIcon sx={styles.Icon} />
-              <ListItemText primary={content[language].dark} sx={styles.ListItemText} />
-            </ToggleButton>
-            <ToggleButton value="light" sx={styles.ToggleButton}>
-              <LightModeOutlinedIcon sx={styles.Icon} />
-              <ListItemText primary={content[language].light} sx={styles.ListItemText} />
-            </ToggleButton>
-          </StyledToggleButtonGroup>
+          {/*<StyledTypography>{content[language].theme}</StyledTypography>*/}
+          {/*<StyledToggleButtonGroup*/}
+          {/*  value={selectTheme}*/}
+          {/*  change={handleChangeTheme}*/}
+          {/*>*/}
+          {/*  <ToggleButton value="dark" sx={styles.ToggleButton}>*/}
+          {/*    <DarkModeOutlinedIcon sx={styles.Icon} />*/}
+          {/*    <ListItemText primary={content[language].dark} sx={styles.ListItemText} />*/}
+          {/*  </ToggleButton>*/}
+          {/*  <ToggleButton value="light" sx={styles.ToggleButton}>*/}
+          {/*    <LightModeOutlinedIcon sx={styles.Icon} />*/}
+          {/*    <ListItemText primary={content[language].light} sx={styles.ListItemText} />*/}
+          {/*  </ToggleButton>*/}
+          {/*</StyledToggleButtonGroup>*/}
         </Container>
       </Paper>
     </Drawer>
