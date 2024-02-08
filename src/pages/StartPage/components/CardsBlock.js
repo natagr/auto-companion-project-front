@@ -102,20 +102,20 @@ const CardsBlock = ({ theme, language }) => {
                 {content[language].body[index]}
                 </Typography>
               </CardContent>
-              <CardActions>
-              {content[language].action[index].map((action, i) =>(
-                <Button
-                  key={i}
-                  variant={variant[index][i]}
-                  size="small"
-                  sx={buttonStyles[variant[index][i]]}
-                  onClick={()=>navigate('/pricing')}
-                >
-                  {action}
-                </Button>
-              ))}
-                
-              </CardActions>
+              {/*<CardActions>*/}
+              {/*{content[language].action[index].map((action, i) =>(*/}
+              {/*  <Button*/}
+              {/*    key={i}*/}
+              {/*    variant={variant[index][i]}*/}
+              {/*    size="small"*/}
+              {/*    sx={buttonStyles[variant[index][i]]}*/}
+              {/*    onClick={()=>navigate('/pricing')}*/}
+              {/*  >*/}
+              {/*    {action}*/}
+              {/*  </Button>*/}
+              {/*))}*/}
+              {/*  */}
+              {/*</CardActions>*/}
             </Card>
           </Grid>
         ))}

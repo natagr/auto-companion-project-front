@@ -43,16 +43,16 @@ export default function TabPanel(props) {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      color: theme.palette.text.primary,
-                      backgroundColor: theme.palette.primary.main,
-                    }}
-                  >
-                    {action}
-                  </Button>
+                  {/*<Button*/}
+                  {/*  variant="contained"*/}
+                  {/*  size="small"*/}
+                  {/*  sx={{*/}
+                  {/*    color: theme.palette.text.primary,*/}
+                  {/*    backgroundColor: theme.palette.primary.main,*/}
+                  {/*  }}*/}
+                  {/*>*/}
+                  {/*  {action}*/}
+                  {/*</Button>*/}
                 </CardActions>
               </Container>
             </Grid>

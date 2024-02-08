@@ -69,25 +69,25 @@ export default function StartPage() {
                     {content[language].body}
                   </Typography>
                 </CardContent>
-                <CardActions>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      color: theme.palette.text.primary,
-                      backgroundColor: theme.palette.primary.main,
-                    }}
-                  >
-                    {content[language].action1}
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    sx={{ color: theme.palette.primary.main }}
-                  >
-                    {content[language].action2}
-                  </Button>
-                </CardActions>
+                {/*<CardActions>*/}
+                {/*  <Button*/}
+                {/*    variant="contained"*/}
+                {/*    size="small"*/}
+                {/*    sx={{*/}
+                {/*      color: theme.palette.text.primary,*/}
+                {/*      backgroundColor: theme.palette.primary.main,*/}
+                {/*    }}*/}
+                {/*  >*/}
+                {/*    {content[language].action1}*/}
+                {/*  </Button>*/}
+                {/*  <Button*/}
+                {/*    variant="outlined"*/}
+                {/*    size="small"*/}
+                {/*    sx={{ color: theme.palette.primary.main }}*/}
+                {/*  >*/}
+                {/*    {content[language].action2}*/}
+                {/*  </Button>*/}
+                {/*</CardActions>*/}
               </Container>
             </Grid>
 

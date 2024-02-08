@@ -166,7 +166,7 @@ const TabsBlock = ({ theme, language }) => {
             index={index}
             title={title}
             body={content[language].body[index]}
-            action={content[language].action[index]}
+            // action={content[language].action[index]}
           />
         ))}
       </Container>
