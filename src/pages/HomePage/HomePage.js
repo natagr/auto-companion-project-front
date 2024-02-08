@@ -140,11 +140,22 @@ const HomePage = ({ theme, language }) => {
 
     // Ініціалізація стану для автомобілів
     const [cars, setCars] = React.useState([]);
+    const [users, setUsers] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [events, setEvents] = React.useState([]);
     const requestAbortController = React.useRef(null);
 
     // Оновлена функція для отримання автомобілів
+    const getUser = () => {
+        request("GET", "/users", {}).then(
+            (response) => {
+                setUsers(response.data)
+            }).catch((error) => {
+            console.log(error);
+            setIsLoading(false); // Обробка помилки
+        });
+    };
+
     const getCars = () => {
         request("GET", "/cars/get-garage", {}).then(
             (response) => {
@@ -158,9 +169,9 @@ const HomePage = ({ theme, language }) => {
 
     // Виклик getCars при монтуванні компонента
     React.useEffect(() => {
-        setIsLoading(true); // Початок завантаження
-        getCars(); // Отримання даних про автомобілі
-        // Тут може бути ваш код для ініціалізації інших запитів або станів
+        setIsLoading(true);
+        getCars();
+        getUser();
     }, []);
 
 
@@ -193,7 +204,7 @@ const HomePage = ({ theme, language }) => {
 
     const content = {
         uk: {
-            title: "Доброго дня, Pavlo!",
+            title: "Доброго дня,",
             body: { formattedDate: getFormattedDate('uk-UA') },
             car: "Мої авто",
             prom: "Акції",
@@ -277,7 +288,7 @@ const HomePage = ({ theme, language }) => {
             />
 
             <Typography variant="h5" style={{ position: "absolute", top: "100px", left: "100px", color: theme.palette.text.primary }}>
-                {content[language].title}
+                {content[language].title + users.firstName + "!"}
             </Typography>
             <Typography variant="body1" style={{ position: "absolute", top: "135px", left: "100px", color: theme.palette.text.primary }}>
                 {content[language].body.formattedDate}

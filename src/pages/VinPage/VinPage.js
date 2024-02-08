@@ -217,16 +217,17 @@ async function addCar(car) {
 const VinPage = ({ theme, language, IsInGarage }) => {
   React.useEffect(() => {
     const jsonString = JSON.stringify(json);
-    addCar({
-      vinCode: vin,
-      carModel: json.make.name + ' ' + json.model.name,
-      allInfoAboutCar: jsonString
-    });
+    // addCar({
+    //   vinCode: vin,
+    //   carModel: json.make.name + ' ' + json.model.name,
+    //   allInfoAboutCar: jsonString
+    // });
   });
-  const { vin } = useParams();
   const [value, setValue] = React.useState(0);
   const [favorite, setFavorite] = React.useState(IsInGarage);
-  const [carJson, setCarJson] = React.useState(json2);
+  const navigate = useNavigate();
+  const { vin } = useParams();
+  const [carJson, setCarJson] = React.useState(null);
 
   const changeFavorite = () => {
     if (favorite)
@@ -254,27 +255,26 @@ const VinPage = ({ theme, language, IsInGarage }) => {
   };
 
   React.useEffect(() => {
+
     const vinRegex = /^[A-HJ-NPR-Z\d]{17}$/;
     if (!vinRegex.test(vin)) {
       navigate('/');
+      return; // Додано return, щоб уникнути подальшого виконання, якщо VIN не валідний
     }
-    else if (carJson === null) {
-      request(
-        "GET",
-        `/vin/${vin}`,
-        {}).then(
-          (response) => {
-            console.log(response);
-            setCarJson(response.data);
-          }).catch(
-            (error) => {
-              console.log(error);
-
-            }
-          );
-    }
-  });
-  const navigate = useNavigate()
+    request("GET", `/vin/${vin}`, {}).then(
+        (response) => {
+          console.log(response);
+          setCarJson(response.data); // Правильно оновлюємо стан
+          // Тепер правильно використовуємо response.data для доступу до даних
+          addCar({
+            vinCode: vin,
+            carModel: response.data.make.name + ' ' + response.data.model.name,
+            allInfoAboutCar: JSON.stringify(response.data) // Тепер правильно конвертуємо в JSON для збереження
+          });
+        }).catch((error) => {
+      console.log(error);
+    });
+  }, [vin]);
 
   return (
     <div style={{ width: '100%', marginLeft: 3, marginRight: 3, }}>

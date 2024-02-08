@@ -103,18 +103,21 @@ function changeImage(userId, imageFile) {
 
 
 const UserProfile = ( ) => {
-  React.useEffect(() => {
-    // getUser(1);
-    // updateUser({ email: 'newemail@example.com'});
-    // changePassword('test12404');
-    // changeData('savds', 'scvfdvd');
-    changeImage(7,avatar);
-  });
   const { language } = useLanguage();
   const theme = useTheme(); // Use the useTheme hook to access the current theme
   const [userAvatar, setUserAvatar] = useState(null);
+  const [user, setUser] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
 
+
+  const getUser = () => {
+    request("GET", "/users", {}).then(
+        (response) => {
+          setUser(response.data)
+        }).catch((error) => {
+      console.log(error);
+    });
+  };
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -153,12 +156,10 @@ const UserProfile = ( ) => {
     setUserAvatar(null);
     handleMenuClose();
   };
-  
-  const userInfo = {
-    firstName: 'Pavlo',
-    lastName: 'Herasymchuk',
-    email: 'pavlo@gmail.com',
-  };
+  React.useEffect(() => {
+    changeImage(7,avatar);
+    getUser();
+  }, []);
   return (
     <Container maxWidth="100%" sx={{ background: theme.palette.background.default }}>
     <Grid container spacing={2}>
@@ -175,10 +176,10 @@ const UserProfile = ( ) => {
               onClick={handleMenuOpen}
             />
             <Typography variant="h4" component="div" color="White" align="center">
-              <div>{userInfo.firstName} {userInfo.lastName}</div>
+              <div>{user.firstName} {user.lastName}</div>
             </Typography>
             <Typography variant="h6" component="div" color="White" align="center">
-              <div>{userInfo.email}</div>
+              <div>{user.email}</div>
             </Typography>
             <label htmlFor="avatar-upload">
               <input
