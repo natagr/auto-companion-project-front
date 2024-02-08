@@ -1,4 +1,5 @@
-import * as React from "react";
+
+import React, {useState} from 'react'
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -141,16 +142,27 @@ function markAsRead(id) {
 
 
 export default function Navbar({ logged }) {
-  React.useEffect(() => {
-    // getNotifications();
-    // addNotification({
-    //     description: 'dcdsdc',
-    //     type: 'event',
-    //     eventId:'1'
-    // });
-    // deleteNotifications();
-    //   markAsRead(63);
-  });
+
+
+
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [user, setUser] = useState([]);
+    const getUser = () => {
+        request("GET", "/users", {}).then(
+            (response) => {
+                setUser(response.data)
+            }).catch((error) => {
+            console.log(error);
+            setIsLoading(false); // Обробка помилки
+
+        });
+    };
+
+    React.useEffect(() => {
+        setIsLoading(true);
+
+        getUser();
+    }, []);
 
   const theme = useTheme();
 
@@ -225,19 +237,19 @@ export default function Navbar({ logged }) {
               justifyContent: "center",
             }}
           >
-            <Search sx={{ width: { xs: "100%", md: "40%" } }}>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder={content[language].vinCode}
-                inputProps={{ "aria-label": "search" }}
-                sx={{
-                  width: '100%',
-                }}
-                onKeyDown={handleEnterKeyPress}
-              />
-            </Search>
+              {IsLogged() && (
+                  <Search sx={{ width: { xs: "100%", md: "40%" } }}>
+                      <SearchIconWrapper>
+                          <SearchIcon />
+                      </SearchIconWrapper>
+                      <StyledInputBase
+                          placeholder={content[language].vinCode}
+                          inputProps={{ "aria-label": "search" }}
+                          sx={{ width: '100%' }}
+                          onKeyDown={handleEnterKeyPress}
+                      />
+                  </Search>
+              )}
           </Box>
           <Box >
             {
