@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import {
   ListItemIcon,
@@ -21,6 +21,7 @@ import {
   Logout,
 
 } from "@mui/icons-material"
+import carImage from '../../pages/components/images/car.png';
 
 
 import { getUserId, request, setAuthHeader, IsLogged } from '../../helpers/axios_helper';
@@ -42,26 +43,67 @@ const NavigateDrawer = ({ open, handleDrawerOpen }) => {
   const drawerWidth = 280;
   const miniDrawerWidth = 65;
 
-  const icons = [<Home />, <Garage />, <CalendarMonth />
-    // , <CarCrash />, <Percent />
-  ];
-  const labels = {
-    uk: ['Головна', 'Гараж', 'Календар', 'Помилки', 'Акції'],
-    en: ['Home', 'Garage', 'Calendar', 'Bugs', 'Promotions'],
+  // const icons = [<Home />, <Garage />, <CalendarMonth />
+  //   // , <CarCrash />, <Percent />
+  // ];
+  // const labels = {
+  //   uk: ['Головна', 'Гараж', 'Календар', 'Помилки', 'Акції'],
+  //   en: ['Home', 'Garage', 'Calendar', 'Bugs', 'Promotions'],
+  // };
+  // const links = [
+  //   '',
+  //   'garage',
+  //   'calendar',
+  //   'bugs',
+  //   'promotions'
+  // ]
+  const iconsBase = [<Home />]; // Базовые иконки, доступные всем пользователям
+  const labelsBase = {
+    uk: ['Головна'],
+    en: ['Home'],
   };
-  const links = [
-    '',
-    'garage',
-    'calendar',
-    'bugs',
-    'promotions'
-  ]
+  const linksBase = [''];
 
-  const userData = {
-    name: 'Pavlo Her',
-    email: 'pavlo@gmail.com',
-    avatar: avatar
-  }
+  const iconsAuth = [<Garage />, <CalendarMonth />]; // Иконки для аутентифицированных пользователей
+  const labelsAuth = {
+    uk: ['Гараж', 'Календар'],
+    en: ['Garage', 'Calendar'],
+  };
+  const linksAuth = ['garage', 'calendar'];
+  const [isLoading, setIsLoading] = React.useState(false);
+  // Объединяем базовые иконки с иконками для аутентифицированных пользователей, если пользователь вошел в систему
+  const isUserLogged = IsLogged();
+  const icons = isUserLogged ? iconsBase.concat(iconsAuth) : iconsBase;
+  const labels = isUserLogged ? {
+    uk: labelsBase.uk.concat(labelsAuth.uk),
+    en: labelsBase.en.concat(labelsAuth.en),
+  } : labelsBase;
+  const links = isUserLogged ? linksBase.concat(linksAuth) : linksBase;
+
+  const [user, setUser] = useState([]);
+  const getUser = () => {
+    request("GET", "/users", {}).then(
+        (response) => {
+          setUser(response.data)
+        }).catch((error) => {
+      console.log(error);
+      setIsLoading(false); // Обробка помилки
+
+    });
+  };
+
+  React.useEffect(() => {
+    setIsLoading(true);
+
+    getUser();
+  }, []);
+
+
+  // const userData = {
+  //   name: 'Pavlo Her',
+  //   email: 'pavlo@gmail.com',
+  //   avatar: avatar
+  // }
 
   const content = {
     uk: {
@@ -117,8 +159,8 @@ const NavigateDrawer = ({ open, handleDrawerOpen }) => {
       {
         IsLogged() &&
         <List>
-          <ListItemStyled key={0} click={() => navigate('/profile')} primary={userData.name} secondary={userData.email}>
-            <Avatar alt={userData.name} src={userData.avatar} sx={{ width: '30px', height: '30px' }} />
+          <ListItemStyled key={0} click={() => navigate('/profile')} primary={user.firstName} secondary={user.email}>
+            <Avatar alt={user.firstName} src={avatar} sx={{ width: '30px', height: '30px' }} />
           </ListItemStyled>
 
           <ListItemStyled key={1} click={() => {setAuthHeader(null); navigate('/')}}
