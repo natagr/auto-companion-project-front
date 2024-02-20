@@ -97,33 +97,33 @@ const InfoCard = ({theme, language, title, icons, configuration, properties, jso
                         </Typography>
                         {type === 'control' &&
                             <>
-                                <IconButton aria-label="more"
-                                            color="inherit" onClick={handleClick}>
-                                    <MoreVert/>
-                                </IconButton>
-                                <Menu
-                                    id="basic-menu"
-                                    anchorEl={anchorEl}
-                                    open={open}
-                                    onClose={handleClose}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
-                                    }}
-                                    sx={{
-                                        '& .MuiPaper-root': {
+                                {/*<IconButton aria-label="more"*/}
+                                {/*            color="inherit" onClick={handleClick}>*/}
+                                {/*    <MoreVert/>*/}
+                                {/*</IconButton>*/}
+                                {/*<Menu*/}
+                                {/*    id="basic-menu"*/}
+                                {/*    anchorEl={anchorEl}*/}
+                                {/*    open={open}*/}S
+                                {/*    onClose={handleClose}*/}
+                                {/*    MenuListProps={{*/}
+                                {/*        'aria-labelledby': 'basic-button',*/}
+                                {/*    }}*/}
+                                {/*    sx={{*/}
+                                {/*        '& .MuiPaper-root': {*/}
 
-                                            backgroundColor: 'transparent',
-                                        }
-                                    }}
-                                >
-                                    <MenuItem onClick={handleClose}>{content[language].more}</MenuItem>
-                                    <MenuItem onClick={() => {
-                                        navigate('/history');
-                                        handleClose()
-                                    }}>{content[language].history}</MenuItem>
-                                    <MenuItem onClick={handleClose}>{content[language].shedule}</MenuItem>
-                                    <MenuItem onClick={handleClose}>{content[language].delete}</MenuItem>
-                                </Menu>
+                                {/*            backgroundColor: 'transparent',*/}
+                                {/*        }*/}
+                                {/*    }}*/}
+                                {/*>*/}
+                                {/*    <MenuItem onClick={handleClose}>{content[language].more}</MenuItem>*/}
+                                {/*    <MenuItem onClick={() => {*/}
+                                {/*        navigate('/history');*/}
+                                {/*        handleClose()*/}
+                                {/*    }}>{content[language].history}</MenuItem>*/}
+                                {/*    <MenuItem onClick={handleClose}>{content[language].shedule}</MenuItem>*/}
+                                {/*    <MenuItem onClick={handleClose}>{content[language].delete}</MenuItem>*/}
+                                {/*</Menu>*/}
                             </>
                         }
                     </Container>

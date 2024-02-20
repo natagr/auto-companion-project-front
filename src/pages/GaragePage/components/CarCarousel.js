@@ -9,6 +9,16 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 import { useMediaQuery } from 'react-responsive';
+import car1 from "../../components/images/car1.png";
+import car2 from "../../components/images/car2.png";
+import car3 from "../../components/images/car3.png";
+import car4 from "../../components/images/car4.png";
+import car5 from "../../components/images/car5.png";
+import audi from "../../components/images/audi-a3.png";
+import audiq8 from "../../components/images/audi_q8.png";
+import bmwx5 from "../../components/images/bmw_x5.png";
+import mersedes_s from "../../components/images/mercedes_s.png";
+import volvo_xc90 from "../../components/images/volvo_xc90.png";
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
@@ -59,6 +69,7 @@ const CarCarousel = ({ theme, images, selectedCar, setSelectedCar }) => {
 
   const [slides, setSlides] = useState({ toShow: 5, toScroll: 3 });
 
+  const carImages = [car1, car2, car3, car4, car5, car, audi, audiq8, bmwx5, mersedes_s, volvo_xc90];
 
   useEffect(() => {
     setSlides((prevValue) => {
@@ -150,7 +161,7 @@ const CarCarousel = ({ theme, images, selectedCar, setSelectedCar }) => {
             }}
             onClick={() => setSelectedCar(index)}
           >
-            <img src={car} alt={image.carModel}
+            <img src={carImages[index % carImages.length]} alt={image.carModel}
               style={{
                 position: 'absolute',
                 width: '100%',

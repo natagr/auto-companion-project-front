@@ -19,6 +19,16 @@ import {
 import InfoCard, {getPropertyValue} from '../components/InfoCard.js';
 
 import {request} from '../../helpers/axios_helper';
+import car1 from "../components/images/car1.png";
+import car2 from "../components/images/car2.png";
+import car3 from "../components/images/car3.png";
+import car4 from "../components/images/car4.png";
+import car5 from "../components/images/car5.png";
+import audi from "../components/images/audi-a3.png";
+import audiq8 from "../components/images/audi_q8.png";
+import bmwx5 from "../components/images/bmw_x5.png";
+import mersedes_s from "../components/images/mercedes_s.png";
+import volvo_xc90 from "../components/images/volvo_xc90.png";
 
 
 const content = {
@@ -151,6 +161,9 @@ const GaragePage = ({theme, language}) => {
     const [brand, setBrand] = React.useState('');
     const [makes, setMakes] = React.useState(['All']);
     const [filteredCars, setFilteredCars] = React.useState(cars);
+
+    const carImages = [car1, car2, car3, car4, car5, car, audi, audiq8, bmwx5, mersedes_s, volvo_xc90];
+
     React.useEffect(() => {
         console.log('useEffect запущено');
         getCars();
@@ -175,7 +188,7 @@ const GaragePage = ({theme, language}) => {
                 setCars(response.data.content);
                 setFilteredCars(response.data.content);
                 setIsDataLoaded(true);
-                console.log(response.data.content[0].allInfoAboutCar)
+                // console.log(response.data.content[0].allInfoAboutCar)
             }).catch((error) => {
             console.log(error);
         });

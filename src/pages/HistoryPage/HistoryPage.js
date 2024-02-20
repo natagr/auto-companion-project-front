@@ -87,11 +87,11 @@ function getColorByType(type) {
 //     },
 // ];
 
-const EditEvent = {
-    date: '20.02.2024',
-    type: 'belt_change',
-    desk: '20лютогоPQR789',
-};
+// const EditEvent = {
+//     date: '20.02.2024',
+//     type: 'belt_change',
+//     desk: '20лютогоPQR789',
+// };
 
 const content = {
     uk: {
@@ -243,13 +243,13 @@ const HistoryPage = ({ theme, language }) => {
                                 </ListSubheader>
                             }
                         >
-                            <ListItemButton key={`item0`} onClick={() => setEditColl(!editColl)}>
-                                <ListItemIcon sx={{ color: getColorByType(EditEvent.type) }}>
-                                    {getIconByType(EditEvent.type)}
-                                </ListItemIcon>
-                                <ListItemText primary={EditEvent.desk} secondary={EditEvent.date} sx={{ '& .MuiListItemText-secondary': { color: theme.palette.secondary.main } }} />
-                                {/*{editColl ? <ExpandLess /> : <ExpandMore />}*/}
-                            </ListItemButton>
+                            {/*<ListItemButton key={`item0`} onClick={() => setEditColl(!editColl)}>*/}
+                            {/*    <ListItemIcon sx={{ color: getColorByType(EditEvent.type) }}>*/}
+                            {/*        {getIconByType(EditEvent.type)}*/}
+                            {/*    </ListItemIcon>*/}
+                            {/*    <ListItemText primary={EditEvent.desk} secondary={EditEvent.date} sx={{ '& .MuiListItemText-secondary': { color: theme.palette.secondary.main } }} />*/}
+                            {/*    /!*{editColl ? <ExpandLess /> : <ExpandMore />}*!/*/}
+                            {/*</ListItemButton>*/}
 
                             {/*<Collapse key={`collapse0`} in={editColl} timeout="auto" unmountOnExit>*/}
                             {/*    {edit &&*/}

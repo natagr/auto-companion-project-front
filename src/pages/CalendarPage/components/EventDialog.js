@@ -1,5 +1,9 @@
 import React, {useEffect, useState} from 'react'
 
+import dayjs from 'dayjs';
+
+
+
 import { useNavigate } from 'react-router-dom';
 
 import { eventTypes } from '../../components/eventTypes'
@@ -29,7 +33,7 @@ import {
     Close,
 
 } from '@mui/icons-material';
-import dayjs from 'dayjs';
+
 
 import car1 from "../../components/images/car1.png"
 import car2 from "../../components/images/car2.png"
@@ -84,6 +88,9 @@ import { getUserId, request, setAuthHeader } from '../../../helpers/axios_helper
 //         name: 'Audi A3',
 //     },
 // ]
+
+
+
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiInputBase-input':
     {
@@ -106,7 +113,7 @@ const content = {
         car: 'Авто',
         date: 'Дата',
         desk: 'Опис',
-        do: 'Виконати',
+        do: 'Історія',
         save: 'Зберегти',
     },
     en: {
@@ -116,7 +123,7 @@ const content = {
         car: 'Auto',
         date: 'Date',
         desk: 'Description',
-        do: 'Execute',
+        do: 'History',
         save: 'Save',
 
     }
@@ -216,13 +223,13 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, id, type,
             (response) => {
                 console.log("Fetching cars data", response.data.content);
                 setCars(response.data.content);
+                // setCars(response.data.content); for jpa when you  use page
                 setIsDataLoaded(true);
 
             }).catch((error) => {
             console.log(error);
         });
     };
-
     useEffect(() => {
         getCars();
     }, []);
@@ -402,8 +409,11 @@ const EventDialog = ({ theme, language, open, isNew, handleClickClose, id, type,
                             }}
                         >
 
-                            {cars.map(car => (
-                                <MenuItem key={car.carModel} value={car.id}><img src={audi} alt={car.carModel} style={{ width: '36px' }} />{'            '}{car.carModel}</MenuItem>
+                            {Array.isArray(cars) && cars.map(car => (
+                                <MenuItem key={car.carModel} value={car.id}>
+                                    <img src={audi} alt={car.carModel} style={{ width: '36px' }} />
+                                    {'            '}{car.carModel}
+                                </MenuItem>
                             ))}
                         </StyledSelect>
                     </FormControl>

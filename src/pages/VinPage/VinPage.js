@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { json } from '../GaragePage/car.js'
 import { json2 } from '../GaragePage/car2.js'
 import car from './images/car.png'
@@ -215,19 +215,46 @@ async function addCar(car) {
 }
 
 const VinPage = ({ theme, language, IsInGarage }) => {
-  React.useEffect(() => {
-    const jsonString = JSON.stringify(json);
-    // addCar({
-    //   vinCode: vin,
-    //   carModel: json.make.name + ' ' + json.model.name,
-    //   allInfoAboutCar: jsonString
-    // });
-  });
-  const [value, setValue] = React.useState(0);
-  const [favorite, setFavorite] = React.useState(IsInGarage);
+  const [value, setValue] = useState(0);
+  const [favorite, setFavorite] = useState(IsInGarage);
   const navigate = useNavigate();
   const { vin } = useParams();
-  const [carJson, setCarJson] = React.useState(null);
+  const [carJson, setCarJson] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+
+  useEffect(() => {
+    // Ensure fetchCarInfo is called only when vin changes and not on every re-render
+    if(vin) fetchCarInfo();
+  }, [vin]); // Dependency array ensures fetchCarInfo is called only when vin changes
+
+  const fetchCarInfo = async () => {
+    const vinRegex = /^[A-HJ-NPR-Z\d]{17}$/;
+    if (!vinRegex.test(vin)) {
+      navigate('/');
+      return;
+    }
+
+    try {
+      const response = await request("GET", `/vin/${vin}`, {});
+      setCarJson(response.data.content);
+      // Conditionally call addCar to prevent duplicate entries
+      if (!carAlreadyAdded(response.data.content)) {
+        addCar({
+          vinCode: vin,
+          carModel: response.data.make.name + ' ' + response.data.model.name,
+          allInfoAboutCar: JSON.stringify(response.data)
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const carAlreadyAdded = (carData) => {
+    // Implement logic to determine if car has been added already
+    return false; // Placeholder return
+  };
 
   const changeFavorite = () => {
     if (favorite)
@@ -247,34 +274,12 @@ const VinPage = ({ theme, language, IsInGarage }) => {
     };
   }
 
-  const [openDialog, setOpenDialog] = React.useState(false);
-  const [openAlert, setOpenAlert] = React.useState(false);
+
 
   const handleClickCloseDialog = () => {
     setOpenDialog(false);
   };
 
-  React.useEffect(() => {
-
-    const vinRegex = /^[A-HJ-NPR-Z\d]{17}$/;
-    if (!vinRegex.test(vin)) {
-      navigate('/');
-      return; // Додано return, щоб уникнути подальшого виконання, якщо VIN не валідний
-    }
-    request("GET", `/vin/${vin}`, {}).then(
-        (response) => {
-          console.log(response);
-          setCarJson(response.data); // Правильно оновлюємо стан
-          // Тепер правильно використовуємо response.data для доступу до даних
-          addCar({
-            vinCode: vin,
-            carModel: response.data.make.name + ' ' + response.data.model.name,
-            allInfoAboutCar: JSON.stringify(response.data) // Тепер правильно конвертуємо в JSON для збереження
-          });
-        }).catch((error) => {
-      console.log(error);
-    });
-  }, [vin]);
 
   return (
     <div style={{ width: '100%', marginLeft: 3, marginRight: 3, }}>
@@ -302,16 +307,16 @@ const VinPage = ({ theme, language, IsInGarage }) => {
                 {vin}
               </Typography>
             </Grid>
-            <Grid item xs={4} container alignItems="center" justifyContent='center'>
-              <Tooltip title={favorite ? content[language].delete : content[language].add}>
-                <Checkbox
-                  checked={favorite}
-                  onChange={changeFavorite}
-                  icon={<BookmarkBorder sx={{ color: theme.palette.secondary.main, fontSize: '3rem' }} />}
-                  checkedIcon={<Bookmark sx={{ fontSize: '3rem' }} />}
-                />
-              </Tooltip>
-            </Grid>
+            {/*<Grid item xs={4} container alignItems="center" justifyContent='center'>*/}
+            {/*  <Tooltip title={favorite ? content[language].delete : content[language].add}>*/}
+            {/*    <Checkbox*/}
+            {/*      checked={favorite}*/}
+            {/*      onChange={changeFavorite}*/}
+            {/*      icon={<BookmarkBorder sx={{ color: theme.palette.secondary.main, fontSize: '3rem' }} />}*/}
+            {/*      checkedIcon={<Bookmark sx={{ fontSize: '3rem' }} />}*/}
+            {/*    />*/}
+            {/*  </Tooltip>*/}
+            {/*</Grid>*/}
           </Grid>
           <Grid container justifyContent="center">
             <Tabs

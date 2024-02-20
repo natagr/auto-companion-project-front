@@ -153,11 +153,11 @@ export default function SignInPage({ theme, language, setLogged }) {
               {content[language].signIn}
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  {content[language].forgPass}
-                </Link>
-              </Grid>
+              {/*<Grid item xs>*/}
+              {/*  <Link href="#" variant="body2">*/}
+              {/*    {content[language].forgPass}*/}
+              {/*  </Link>*/}
+              {/*</Grid>*/}
               <Grid item>
                 <Link href="/signUp" variant="body2">
                   {content[language].dontHaveAc}

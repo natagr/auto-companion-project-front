@@ -25,6 +25,8 @@ import bmwx5 from "../components/images/bmw_x5.png"
 import mersedes_s from "../components/images/mercedes_s.png"
 import volvo_xc90 from "../components/images/volvo_xc90.png"
 
+
+
 import { getUserId, request, setAuthHeader } from '../../helpers/axios_helper';
 
 // const cars = [
@@ -138,6 +140,8 @@ function getEvents(month, year) {
 
 const HomePage = ({ theme, language }) => {
 
+    const carImages = [car1, car2, car3, car4, car5, car, audi, audiq8, bmwx5, mersedes_s, volvo_xc90];
+
     // Ініціалізація стану для автомобілів
     const [cars, setCars] = React.useState([]);
     const [users, setUsers] = React.useState([]);
@@ -150,6 +154,8 @@ const HomePage = ({ theme, language }) => {
         request("GET", "/users", {}).then(
             (response) => {
                 setUsers(response.data)
+                console.log(response.data)
+
             }).catch((error) => {
             console.log(error);
             setIsLoading(false); // Обробка помилки
@@ -159,8 +165,9 @@ const HomePage = ({ theme, language }) => {
     const getCars = () => {
         request("GET", "/cars/get-garage", {}).then(
             (response) => {
-                setCars(response.data.content); // Оновлення стану автомобілів
-                setIsLoading(false); // Завершення завантаження
+                setCars(response.data.content);
+                // setCars(response.data.content);  for data jpa when you use page
+                setIsLoading(false);
             }).catch((error) => {
             console.log(error);
             setIsLoading(false); // Обробка помилки
@@ -213,7 +220,7 @@ const HomePage = ({ theme, language }) => {
             parts: ['Гальма', 'Двигун і частини двигуна', 'Фільтри', 'Кермове управління і підвіска']
         },
         en: {
-            title: "Hello, Pavlo!",
+            title: "Hello, ",
             body: { formattedDate: getFormattedDate('en-US') },
             car: "My cars",
             prom: "Promotions",
@@ -302,7 +309,7 @@ const HomePage = ({ theme, language }) => {
                                 <Card key={index} sx={{ background: theme.palette.background.default, width: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
                                     <CardMedia
-                                        image={car1}
+                                        image={carImages[index % carImages.length]}
                                         title={car.carModel}
                                         component="img"
                                         width="100%"

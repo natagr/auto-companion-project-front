@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import MiniCalendar from '../components/MiniCalendar'
 
 import dayjs from 'dayjs';
-
+import utc from 'dayjs/plugin/utc';
 
 
 
@@ -93,6 +93,7 @@ import EventDialog from './components/EventDialog';
 //     });
 // }
 
+dayjs.extend(utc);
 function equalsDates(date1, date2) {
     if (!date1)
         return false;
@@ -518,7 +519,7 @@ const CalendarPage = ({theme, language}) => {
 
                                                                             setEventCar(selectedCar.id);
 
-                                                                            setEventDate(dayjs(item.date));
+                                                                            setEventDate(dayjs(item.date).utc());
                                                                             setEventDesk(item.description);
 
                                                                             setIsNew(false);
@@ -616,7 +617,7 @@ const CalendarPage = ({theme, language}) => {
 
 
                                                             setEventCar(selectedCar.id);
-                                                            setEventDate(dayjs(item.date));
+                                                            setEventDate(dayjs(item.date).utc().format());
                                                             setEventDesk(item.description);
                                                             setIsNew(false);
                                                             handleClickOpenDialog(false);
